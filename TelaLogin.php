@@ -14,7 +14,7 @@
 </head>
 <body class="d-flex aling-items-center py-4 bg-body-tertiary">
     <main class="w-100 m-auto form-container">
-        <form action="POST">
+        <form action="Controller/login.php" method="POST">
             <div class="d-flex flex-column justify-content-center align-items-center ">
                 
                 <img src="imagem/logo.png" alt="logo perbras" class="m-3" height="90" width="90">
@@ -32,7 +32,7 @@
                 <label for="senha">Senha:</label>
             </div>
             <br>
-            <button class="btn btn-primary w-100 py-2">Entrar</button>
+            <input type="submit" class="btn btn-primary w-100 py-2" name="entrar" id="entrar" value="Entrar"></input>
         </form>
     </main>
     
