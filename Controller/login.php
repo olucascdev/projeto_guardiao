@@ -26,14 +26,20 @@
             unset($_SESSION['user']);
             unset($_SESSION['senha']);
             header('Location: TelaLogin.php');
-            exit(); 
+             
             
 
         }else{ //caso exista
-            $_SESSION['user'] = $user;
-            $_SESSION['senha'] = $senha;
-            header('Location: ../sistema.php');
-            exit(); 
+            while($linha = $result->fetch_assoc()){
+                $_SESSION['id'] = $linha['id'];
+                $_SESSION['nome'] = $linha['nome'];
+                $_SESSION['acesso'] = $linha['acesso'];
+                $_SESSION['user'] = $user;
+                $_SESSION['senha'] = $senha;
+                header('Location: ../home.php');
+                
+            }
+            
         }
     }    
     

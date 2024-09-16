@@ -1,5 +1,9 @@
 <?php 
-    include_once "Controller/conexao.php"
+    include_once "Controller/conexao.php";
+    session_start();
+    if(isset($_SESSION['id'])) {
+        header('Location: home.php');
+    }
 ?>
 
 
