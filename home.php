@@ -32,55 +32,30 @@
         <a class="parameter-item" data-bs-toggle="collapse" href="#param1Subthemes" role="button" aria-expanded="false" aria-controls="param1Subthemes">
             <i class="bi bi-newspaper"></i> Avaliações
         </a>
-        <div class="collapse parameter-subthemes" id="param1Subthemes">
-          <a href="#"><i class="bi bi-newspaper"></i> Relatório</a>
-          <a href="#"><i class="bi bi-bar-chart-line-fill"></i> Histórico</a>
-          <a href="#"><i class="bi bi-file-earmark-plus-fill"></i> Novo Projeto</a>
-        </div>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" data-bs-toggle="collapse" href="#param2Subthemes" role="button" aria-expanded="false" aria-controls="param2Subthemes">
-          <i class="bi bi-gear-fill"></i> Parametro 2
+        <a class="parameter-item" href="CadastroUser.php"  role="button" aria-expanded="false" aria-controls="param2Subthemes">
+          <i class="bi bi-people-fill"></i> Usuários
         </a>
-        <div class="collapse parameter-subthemes" id="param2Subthemes">
-          <a href="#">Subtema 2.1</a>
-          <a href="#">Subtema 2.2</a>
-          <a href="#">Subtema 2.3</a>
-        </div>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" data-bs-toggle="collapse" href="#param3Subthemes" role="button" aria-expanded="false" aria-controls="param3Subthemes">
+        <a class="parameter-item"  href="#param3Subthemes" role="button" aria-expanded="false" aria-controls="param3Subthemes">
           <i class="bi bi-gear-fill"></i> Parametro 3
         </a>
-        <div class="collapse parameter-subthemes" id="param3Subthemes">
-          <a href="#">Subtema 3.1</a>
-          <a href="#">Subtema 3.2</a>
-          <a href="#">Subtema 3.3</a>
-        </div>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" data-bs-toggle="collapse" href="#param4Subthemes" role="button" aria-expanded="false" aria-controls="param4Subthemes">
+        <a class="parameter-item" href="#param4Subthemes" role="button" aria-expanded="false" aria-controls="param4Subthemes">
           <i class="bi bi-gear-fill"></i> Parametro 4
         </a>
-        <div class="collapse parameter-subthemes" id="param4Subthemes">
-          <a href="#">Subtema 4.1</a>
-          <a href="#">Subtema 4.2</a>
-          <a href="#">Subtema 4.3</a>
-        </div>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" data-bs-toggle="collapse" href="#param5Subthemes" role="button" aria-expanded="false" aria-controls="param5Subthemes">
+        <a class="parameter-item"  href="#param5Subthemes" role="button" aria-expanded="false" aria-controls="param5Subthemes">
           <i class="bi bi-gear-fill"></i> Parametro 5
         </a>
-        <div class="collapse parameter-subthemes" id="param5Subthemes">
-          <a href="#">Subtema 5.1</a>
-          <a href="#">Subtema 5.2</a>
-          <a href="#">Subtema 5.3</a>
-        </div>
       </div>
     </nav>
     <div class="mt-auto">
-      <a href="#" class="text-center d-block">Logout</a>
+      <a href="Controller/logout.php" class="text-center d-block">Logout</a>
     </div>
   </div>
 
@@ -119,7 +94,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <iframe src="https://www.example.com" width="100%" height="400px" frameborder="0"></iframe>
+          <iframe id="main" src="." width="100%" height="900px" frameborder="0"></iframe>
         </div>
       </div>
     </div>

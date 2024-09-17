@@ -38,3 +38,8 @@ img{
     height: 100vh;
     overflow-y: auto;
   }
+  .card{
+    background-color: rgb(16, 29, 37);
+    height: 150px;
+    color: aliceblue;
+  }
