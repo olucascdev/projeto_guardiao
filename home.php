@@ -29,13 +29,14 @@
     </div>
     <nav>
       <div class="mb-2">
-        <a class="parameter-item" data-bs-toggle="collapse" href="#param1Subthemes" role="button" aria-expanded="false" aria-controls="param1Subthemes">
+        <a class="parameter-item" target="frame" href="." role="button" aria-expanded="false" aria-controls="param1Subthemes">
             <i class="bi bi-newspaper"></i> Avaliações
         </a>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" href="CadastroUser.php"  role="button" aria-expanded="false" aria-controls="param2Subthemes">
-          <i class="bi bi-people-fill"></i> Usuários
+        <a class="parameter-item" href="CadastroUser.php" target="frame" role="button" aria-expanded="false" aria-controls="param2Subthemes">
+          <i class="bi bi-people-fill"></i> Usuários <?php 
+          ?>
         </a>
       </div>
       <div class="mb-2">
@@ -94,7 +95,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <iframe id="main" src="." width="100%" height="900px" frameborder="0"></iframe>
+          <iframe id="tela" name="frame" src="CadastroUser.php" width="100%" height="900px" frameborder="0"></iframe>
         </div>
       </div>
     </div>
