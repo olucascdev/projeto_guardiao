@@ -1,0 +1,19 @@
+body {
+    background-color: #f9f9f9; /* Neutral background color */
+}
+.container2 {
+    max-width: 950px; /* Reduced container width */
+    margin: 40px; /* Centered container */
+}
+.box-search {
+    display: flex;
+    justify-content: end;
+    gap: 1%;
+    margin:-40px -48px -20px 0px;
+}
+.table {
+    font-size: 14px; /* Reduced table font size */
+}
+.table th, .table td {
+    padding: 10px; /* Reduced table cell padding */
+}

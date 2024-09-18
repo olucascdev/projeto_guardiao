@@ -34,9 +34,8 @@
         </a>
       </div>
       <div class="mb-2">
-        <a class="parameter-item" href="CadastroUser.php" target="frame" role="button" aria-expanded="false" aria-controls="param2Subthemes">
-          <i class="bi bi-people-fill"></i> Usuários <?php 
-          ?>
+        <a class="parameter-item" href="Users.php" target="frame" role="button" aria-expanded="false" aria-controls="param2Subthemes">
+          <i class="bi bi-people-fill"></i> Usuários 
         </a>
       </div>
       <div class="mb-2">
