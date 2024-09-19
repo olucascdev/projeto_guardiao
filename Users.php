@@ -26,6 +26,9 @@
     }else{
         $rows = mysqli_query($conn, "SELECT * FROM usuarios ORDER BY id asc LIMIT $inicio, $itens_por_pagina");
     }
+
+  
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -36,17 +39,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/Users.css">
-    <style>
-        .box-search{
-            display: flex;
-            justify-content: end;
-            gap: 1%;
-        }
-
-        
-
-       
-    </style>
 </head>
 <body>
 
@@ -58,15 +50,15 @@
             </div>
         </div>
             <!-- Seção de Pesquisa -->
-            <div class="box-search">
+            <div class="box-search w-auto">
                     <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Novo Usuário</button>
                     <button class="btn btn-warning"><i class="bi bi-printer-fill"></i> Imprimir</button>
                     <button class="btn btn-info"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>   
-                    <input type="search" class="form-control w-25" placeholder="Pesquisar por Cód / Email / Nome" id="pesquisar">
+                    <input type="search" class="form-control w-50" placeholder="Pesquisar por Cód / Email / Nome" id="pesquisar">
                     <button class="btn btn-primary" onclick="searchData()"><i class="bi bi-search"></i></button>
             </div>
         <div class="row">
-            <div class="col">
+            <div id='' class="col">
                 <!-- Tabela para exibir Users cadastrados -->
                 <table class="table table-light table-hover m-5" border="1" cellspacing = 0 cellpadding = 10>
                     <thead>
@@ -85,9 +77,43 @@
                            
                            <td><?php echo $row['id']; ?></td> <!-- Mudar o nome para name caso der erro-->
                            <td><?php echo $row['nome']; ?></td>
-                           <td><?php echo $row['acesso']; ?></td>
+                           <td>
+                            <?php 
+                                switch ($row['acesso']) {
+                                    case '0':
+                                        echo 'Visitante';
+                                        break;
+                                    case '1':
+                                        echo 'Usuário';
+                                        break;
+                                    case '2':
+                                        echo 'Gestor';
+                                        break;
+                                    case '3':
+                                        echo 'Administrador';
+                                        break;
+                                    case '4':
+                                        echo 'Master';
+                                        break;
+                                }
+                           
+                           ?>
+                           </td>
                            <td><?php echo $row['email']; ?></td>
-                           <td class="text-center"><?php echo $row['ativo']; ?></td>
+                           <td class="text-center">
+                            <?php 
+                            switch ($row['ativo']) {
+                                case '0':
+                                    echo 'Desativado';
+                                    break;
+                                
+                                default:
+                                    echo 'Ativo';
+                                    break;
+                            }
+                            
+                            ?>
+                        </td>
                           <!-- <td><img src="foto/<?php echo $row['foto']; ?>"  width="64px" title="<?php echo $row['foto']; ?>"> </td>     -->
 
                             <td class="text-center">
@@ -138,7 +164,7 @@
             </div>
         </div>
 
-    </div>
+</div>
 
 
 
