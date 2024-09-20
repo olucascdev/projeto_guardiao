@@ -1,5 +1,7 @@
 <?php 
   include_once 'Controller/conexao.php';
+  include('class/ClassEstados.php');
+  $objEstados = new ClassEstados();
   session_start();
 ?>
 <!DOCTYPE html>
@@ -71,7 +73,11 @@
                 <div class="col-md-3 mb-3">
                     <label for="estado" class="form-label">Estado (UF)</label>
                     <select class="form-select" id="estado" required>
+                      <!-- Logica para pegar os UF no banco e printar -->
                         <option selected disabled value="">Selecione o estado</option>
+                        <?php foreach ($objEstados->getEstados() as $estado) {?>
+                          <option value="<?php echo $estado->id; ?>"><?php echo $estado->nome; ?></option>
+                          <?php }?>
                         
                     </select>
                     <div class="invalid-feedback">Selecione o estado.</div>
@@ -79,8 +85,9 @@
 
                 <div class="col-md-3 mb-3">
                     <label for="cidade" class="form-label">Cidade do Usuário</label>
-                    <select class="form-select" id="cidade" disabled>
-                        <option selected disabled>Aguardando seleção do estado</option>
+                    <select class="form-select" id="cidade" disabled="disable">
+                        <option value=" ">Aguardando seleção do estado</option>
+
                     </select>
                 </div>
             </div>
@@ -147,5 +154,6 @@
           })
       })()
     </script>
+    <script> src="script.js"</script> 
 </body>
 </html>
