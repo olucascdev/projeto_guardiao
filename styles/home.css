@@ -4,6 +4,7 @@
 html, body {
   height: 100%;       /* Garante que a página ocupe 100% da altura */
   overflow: hidden;   /* Desativa o scroll */
+  background-color: rgb(236, 245, 255);
 }
 body {
     font-family: 'Poppins', sans-serif;
@@ -20,7 +21,7 @@ img{
     min-height: 100vh;
     height: 100vh;
     position: fixed;
-    width: 250px;
+    width: 200px;
   }
   .sidebar a {
     color: white;
@@ -38,7 +39,7 @@ img{
     padding-left: 20px;
   }
   .main-content {
-    margin-left: 250px;
+    margin-left: 200px;
     padding: 20px;
     height: 100vh;
     overflow-y: auto;
@@ -52,7 +53,9 @@ img{
    
     
   }
-  #tela{
+  
 
-    
+  iframe, .card{
+    border-radius: 15px;
+    box-shadow: 1px 3px 15px 3px rgba(0, 0, 0, 0.164);
   }

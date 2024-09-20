@@ -51,7 +51,7 @@
         </div>
             <!-- Seção de Pesquisa -->
             <div class="box-search w-auto">
-                    <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Novo Usuário</button>
+                    <a href="CadastroUser.php"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Novo Usuário</button></a>
                     <button class="btn btn-warning"><i class="bi bi-printer-fill"></i> Imprimir</button>
                     <button class="btn btn-info"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>   
                     <input type="search" class="form-control w-50" placeholder="Pesquisar por Cód / Email / Nome" id="pesquisar">
@@ -133,10 +133,10 @@
                                 <a href="Controller/excluir.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
                             </a>
                             </td>
-                            <td class="text-center">
+                           <!-- <td class="text-center">
                                 <i class="bi bi-camera-fill"></i>
                             </a>
-                            </td>
+                            </td> -->
                         </tr>
                         <?php endforeach;?>                              
 
