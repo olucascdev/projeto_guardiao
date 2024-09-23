@@ -32,7 +32,6 @@
                     <label for="permissao" class="form-label">Permissão do Usuário</label>
                     <select class="form-select" id="permissao" required>
                         <option selected disabled value="">Selecione o nível de permissão</option>
-                      
                     </select>
                     <div class="invalid-feedback">Selecione a permissão.</div>
                 </div>
@@ -41,7 +40,6 @@
                     <label for="estabelecimento" class="form-label">Estabelecimento do Usuário</label>
                     <select class="form-select" id="estabelecimento">
                         <option selected>Não vincular estabelecimento ao usuário</option>
-                      
                     </select>
                 </div>
 
@@ -49,7 +47,6 @@
                     <label for="empresa" class="form-label">Empresa do Usuário</label>
                     <select class="form-select" id="empresa">
                         <option selected>Não vincular empresa ao usuário</option>
-                      
                     </select>
                 </div>
             </div>
@@ -70,19 +67,27 @@
 
                 <div class="col-md-3 mb-3">
                     <label for="estado" class="form-label">Estado (UF)</label>
-                    <select class="form-select" id="estado" required>
-                      <!-- Logica para pegar os UF no banco e printar -->
+                    <select class="form-select" name="uf" id="uf" onchange="cidades()" required>
                         <option selected disabled value="">Selecione o estado</option>
+                        <?php
+                            $stmt = $conn->prepare('SELECT * FROM estados');
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            while($row = $result->fetch_object()){
+                                echo "<option value='{$row->id}'>{$row->nome}</option>";
+                            }
+                        ?>
                     </select>
                     <div class="invalid-feedback">Selecione o estado.</div>
                 </div>
 
                 <div class="col-md-3 mb-3">
                     <label for="cidade" class="form-label">Cidade do Usuário</label>
-                    <select class="form-select" id="cidade" disabled>
-                        <option value="">Aguardando seleção do estado</option>
-
+                    <select class="form-select" name="cidades" id="cidades">
+                        <option>Aguardando seleção do estado</option>
                     </select>
+                    
                 </div>
             </div>
 
@@ -130,24 +135,8 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // Exemplo de JavaScript para desabilitar o envio do formulário se houver campos inválidos
-      (function () {
-        'use strict'
-        var forms = document.querySelectorAll('.needs-validation')
-
-        Array.prototype.slice.call(forms)
-          .forEach(function (form) {
-            form.addEventListener('submit', function (event) {
-              if (!form.checkValidity()) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
-              form.classList.add('was-validated')
-            }, false)
-          })
-      })()
-    </script>
-    <script> src="script.js"</script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Corrigido o link do script -->
+    
 </body>
 </html>
