@@ -51,9 +51,11 @@
         </div>
             <!-- Seção de Pesquisa -->
             <div class="box-search w-auto">
-                    <a href="CadastroUser.php"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Novo Usuário</button></a>
+                    <a href="CadastroUsuario.php"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Novo Usuário</button></a>
                     <button class="btn btn-warning"><i class="bi bi-printer-fill"></i> Imprimir</button>
-                    <button class="btn btn-info"><i class="bi bi-arrow-clockwise"></i> Atualizar</button>   
+                    <button type="button" class="btn btn-info" onclick="atualizarPagina()">
+                        <i class="bi bi-arrow-clockwise"></i> Atualizar
+                    </button>   
                     <input type="search" class="form-control w-50" placeholder="Pesquisar por Cód / Email / Nome" id="pesquisar">
                     <button class="btn btn-primary" onclick="searchData()"><i class="bi bi-search"></i></button>
             </div>
@@ -175,6 +177,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js">
 </script>
+<!--script para pesquisa-->
 <script>
     var search = document.getElementById('pesquisar');
     search.addEventListener("keydown", function(event){
@@ -186,6 +189,26 @@
     function searchData()
     {
         window.location = 'Users.php?search='+search.value;
+    }
+</script>
+<!--script para atualizar pagina e resetar a pesquisa-->
+<script>
+    function atualizarPagina() {
+        // Limpa o campo de pesquisa
+        document.getElementById('pesquisar').value = '';
+
+        // Remove qualquer parâmetro de busca da URL e recarrega a página
+        const urlSemParametros = window.location.href.split('?')[0];
+        window.location.href = urlSemParametros;
+    }
+
+    // Função de pesquisa (se já estiver implementada)
+    function searchData() {
+        const query = document.getElementById('pesquisar').value;
+        if (query) {
+            // Redireciona para a página com o parâmetro de busca
+            window.location.href = `?search=${query}`;
+        }
     }
 </script>
 </body>
