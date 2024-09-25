@@ -120,7 +120,7 @@
 
                             <td class="text-center">
                                     <!-- Botão de Editar -->
-                                    <a href="?
+                                    <a href="CadastroUsuarioEdit.php?
                                     &id=<?php echo $row['id']; ?>
                                     &nome=<?php echo $row['nome']; ?>
                                     &acesso=<?php echo $row['acesso']; ?>

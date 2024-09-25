@@ -21,12 +21,16 @@ include_once 'Controller/conexao.php';
                 <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="nome" class="form-label">Nome do Usuário</label>
-                                <input type="text" class="form-control" id="nome" placeholder="Informe o nome do usuário" required>
+                                <input type="text" class="form-control" id="nome" placeholder="Informe o nome do usuário" required value="<?php 
+                                        echo filter_input(INPUT_GET, "nome", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                                 <div class="invalid-feedback">Informe o nome do usuário.</div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="permissao" class="form-label">Permissão do Usuário</label>
-                                <select class="form-select" id="permissao" required>
+                                <select class="form-select" id="permissao" required value="<?php 
+                                        echo filter_input(INPUT_GET, "permissao", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">>
                                     <option selected disabled value="">Selecione o nível de permissão</option>
                                     <option value="">4</option>
                                     
@@ -35,7 +39,9 @@ include_once 'Controller/conexao.php';
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="estabelecimento" class="form-label">Estabelecimento do Usuário</label>
-                                <select class="form-select" id="estabelecimento">
+                                <select class="form-select" id="estabelecimento" value="<?php 
+                                        echo filter_input(INPUT_GET, "estabelecimento", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">>
                                     <option selected>Não vincular estabelecimento ao usuário</option>
                                     <option value="">SPT25</option>
                                     <option value="">SPT26</option>
@@ -44,7 +50,10 @@ include_once 'Controller/conexao.php';
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="empresa" class="form-label">Empresa do Usuário</label>
-                                <select class="form-select" id="empresa">
+                                <select class="form-select" id="empresa"
+                                value="<?php 
+                                        echo filter_input(INPUT_GET, "empresa", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">>
                                     <option selected>Não vincular empresa ao usuário</option>
                                     <option value="">PERBRAS</option>
                                 </select>
@@ -54,18 +63,24 @@ include_once 'Controller/conexao.php';
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="login" class="form-label">Login do Usuário</label>
-                                <input type="text" class="form-control" id="usuario" placeholder="Informe o login do usuário" required>
+                                <input type="text" class="form-control" id="usuario" placeholder="Informe o login do usuário" required value="<?php 
+                                        echo filter_input(INPUT_GET, "usuario", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                                 <div class="invalid-feedback">Informe o login do usuário.</div>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="email" class="form-label">E-mail do Usuário</label>
-                                <input type="email" class="form-control" id="email" placeholder="email@usuario.com.br" required>
+                                <input type="email" class="form-control" id="email" placeholder="email@usuario.com.br" required value="<?php 
+                                        echo filter_input(INPUT_GET, "email", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                                 <div class="invalid-feedback">Informe um e-mail válido.</div>
                             </div>
                 <!-- Dropdown de Estados -->
                         <div class="col-md-3 mb-3">
                             <label class="form-label">Estado (UF)</label>
-                            <select class="form-select" name="uf" id="uf" onchange="cidades()">
+                            <select class="form-select" name="uf" id="uf" onchange="cidades()" value="<?php 
+                                        echo filter_input(INPUT_GET, "uf", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                                 <option value="">Selecione um Estado</option>
                                 <?php
                 
@@ -81,7 +96,9 @@ include_once 'Controller/conexao.php';
                     <!-- Dropdown de Cidades -->
                         <div class="col-md-3 mb-3">
                             <label for="cidade" class="form-label">Cidade do Usuário</label>
-                            <select  class="form-select" name="cidades" id="cidades">
+                            <select  class="form-select" name="cidades" id="cidades" value="<?php 
+                                        echo filter_input(INPUT_GET, "cidades", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                                 <option>Selecione o Estado primeiro</option>
                             </select>
                         </div>
@@ -90,29 +107,40 @@ include_once 'Controller/conexao.php';
                 <div class="row">
                     <div class="col-md-4 mb-3">
                         <label for="telefone-fixo" class="form-label">Telefone Fixo</label>
-                        <input type="tel" class="form-control" id="telefone-fixo" placeholder="(00) 0000-0000">
+                        <input type="tel" class="form-control" id="telefone-fixo" placeholder="(00) 0000-0000" value="<?php 
+                                        echo filter_input(INPUT_GET, "telefone-fixo", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="telefone-movel" class="form-label">Telefone Móvel</label>
-                        <input type="tel" class="form-control" id="telefone-movel" placeholder="(00) 00000-0000">
+                        <input type="tel" class="form-control" id="telefone-movel" placeholder="(00) 00000-0000"
+                        value="<?php 
+                                        echo filter_input(INPUT_GET, "telefone-movel", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="observacoes" class="form-label">Observações sobre o Usuário</label>
-                        <textarea class="form-control" id="observacoes" rows="2" placeholder="Informe observações se necessário"></textarea>
+                        <textarea class="form-control" id="observacoes" rows="2" placeholder="Informe observações se necessário" value="<?php 
+                                        echo filter_input(INPUT_GET, "observacoes", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>"></textarea>
                     </div>
                 </div>
                 <!-- Quarta linha com 2 colunas -->
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="notificacoes" class="form-label">Enviar Notificações por E-mail</label>
-                        <select class="form-select" id="notificacoes">
+                        <select class="form-select" id="notificacoes" value="<?php 
+                                        echo filter_input(INPUT_GET, "notificacoes", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                             <option value="sim" selected>Sim, enviar e-mails de notificações</option>
                             <option value="nao">Não enviar e-mails de notificações</option>
                         </select>
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="data-expiracao" class="form-label">Acesso do Usuário Expira em</label>
-                        <input type="date" class="form-control" id="data-expiracao">
+                        <input type="date" class="form-control" id="data-expiracao" value="<?php 
+                                        echo filter_input(INPUT_GET, "data-expiracao", FILTER_SANITIZE_SPECIAL_CHARS);
+                                        ?>">
                     </div>
                 </div>
                 <!-- Botões -->
