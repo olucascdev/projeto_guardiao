@@ -2,11 +2,11 @@
 session_start();
 include_once 'conexao.php';
 
-// Recebe o valor do parâmetro 'codigo' da URL e o sanitiza para evitar XSS (Cross-Site Scripting)
+// Recebe o valor do parâmetro 'id' da URL e sanitiza
+$userId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-$userId = $_SESSION['id'];
-if ($userId) {
-    // Cria a consulta SQL para recuperar o nome da imagem associada ao produto
+if ($userId > 0) {
+    // Cria a consulta SQL para recuperar o nome da imagem associada ao usuário
     $sql = "SELECT foto FROM usuarios WHERE id = $userId";
     $resultado = mysqli_query($conn, $sql);
 
@@ -18,17 +18,17 @@ if ($userId) {
         $caminhoImagem = '../img/' . $imagem;
 
         // Exclui o registro do banco de dados
-        $sqlDelete = "DELETE FROM usuarios WHERE id=$userId";
+        $sqlDelete = "DELETE FROM usuarios WHERE id = $userId";
         if (mysqli_query($conn, $sqlDelete)) {
             // Verifica se o arquivo da imagem existe e exclui
-            if (file_exists($caminhoImagem)) {
+            if (!empty($imagem) && file_exists($caminhoImagem)) {
                 unlink($caminhoImagem);
             }
 
             // Exibe mensagem de sucesso e redireciona
             echo "
                 <script>
-                    alert('Registro excluído com sucesso');
+                    alert('Usuário excluído com sucesso');
                     window.location.href='../Users.php';
                 </script>
             ";
@@ -37,16 +37,16 @@ if ($userId) {
             echo "
                 <script>
                     alert('Erro ao excluir registro do banco de dados');
-                    window.location.href='../index.php';
+                    window.location.href='../Users.php';
                 </script>
             ";
         }
     } else {
-        // Se não encontrar o produto
+        // Se não encontrar o usuário
         echo "
             <script>
-                alert('Produto não encontrado');
-                window.location.href='../index.php';
+                alert('Usuário não encontrado');
+                window.location.href='../Users.php';
             </script>
         ";
     }
@@ -55,7 +55,7 @@ if ($userId) {
     echo "
         <script>
             alert('ID inválido');
-            window.location.href='../index.php';
+            window.location.href='../Users.php';
         </script>
     ";
 }
