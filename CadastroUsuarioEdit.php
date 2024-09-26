@@ -36,7 +36,11 @@ if (isset($_GET['id'])) {
                 <label for="permissao" class="form-label">Permissão do Usuário</label>
                 <select class="form-select" id="permissao" required>
                     <option selected disabled value="">Selecione o nível de permissão</option>
-                    <option value="4">4</option>
+                    <option value="0" <?php echo (isset($usuario) && $usuario->acesso == 0) ? 'selected' : ''; ?>>Visitante</option>
+                    <option value="1" <?php echo (isset($usuario) && $usuario->acesso == 1) ? 'selected' : ''; ?>>Usuário</option>
+                    <option value="2" <?php echo (isset($usuario) && $usuario->acesso == 2) ? 'selected' : ''; ?>>Gestor</option>
+                    <option value="3" <?php echo (isset($usuario) && $usuario->acesso == 3) ? 'selected' : ''; ?>>Administrador</option>
+                    <option value="4" <?php echo (isset($usuario) && $usuario->acesso == 4) ? 'selected' : ''; ?>>Master</option>
                 </select>
             </div>
             <div class="col-md-3 mb-3">
@@ -166,6 +170,7 @@ if (isset($_GET['id'])) {
             var observacoes = document.getElementById('observacoes').value;
             var notificacoes = document.getElementById('notificacoes').value;
             var dataExpiracao = document.getElementById('data-expiracao').value;
+            var permissao = document.getElementById('permissao').value; // Captura o valor da permissão
 
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'Controller/salvar_usuario.php', true);
@@ -178,8 +183,10 @@ if (isset($_GET['id'])) {
                     alert('Erro ao salvar usuário: ' + this.responseText);
                 }
             };
-            xhr.send(`id=${id}&nome=${encodeURIComponent(nome)}&usuario=${encodeURIComponent(usuario)}&email=${encodeURIComponent(email)}&uf=${encodeURIComponent(uf)}&cidade=${encodeURIComponent(cidade)}&telefoneFixo=${encodeURIComponent(telefoneFixo)}&telefoneMovel=${encodeURIComponent(telefoneMovel)}&observacoes=${encodeURIComponent(observacoes)}&notificacoes=${encodeURIComponent(notificacoes)}&dataExpiracao=${encodeURIComponent(dataExpiracao)}`);
+            xhr.send(`id=${id}&nome=${encodeURIComponent(nome)}&usuario=${encodeURIComponent(usuario)}&email=${encodeURIComponent(email)}&uf=${encodeURIComponent(uf)}&cidade=${encodeURIComponent(cidade)}&telefoneFixo=${encodeURIComponent(telefoneFixo)}&telefoneMovel=${encodeURIComponent(telefoneMovel)}&observacoes=${encodeURIComponent(observacoes)}&notificacoes=${encodeURIComponent(notificacoes)}&dataExpiracao=${encodeURIComponent(dataExpiracao)}&permissao=${encodeURIComponent(permissao)}`); // Inclui a permissão
         }
+
+        
     </script>
 </body>
 </html>

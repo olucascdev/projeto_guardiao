@@ -15,10 +15,11 @@ if (isset($_POST['id'])) {
     $observacoes = $_POST['observacoes'];
     $notificacoes = $_POST['notificacoes'];
     $dataExpiracao = $_POST['dataExpiracao'];
+    $permissao = $_POST['permissao'];
 
     // Prepara a query para atualizar os dados do usuário
-    $stmt = $conn->prepare("UPDATE usuarios SET nome=?, usuario=?, email=?, regiao=?, cidade=?, tel_fixo=?, tel_movel=?, observacao=?, notificacao=?, expira=? WHERE id=?");
-    $stmt->bind_param("ssssssssssi", $nome, $usuario, $email, $uf, $cidade, $telefoneFixo, $telefoneMovel, $observacoes, $notificacoes, $dataExpiracao, $id);
+    $stmt = $conn->prepare("UPDATE usuarios SET nome=?, usuario=?, email=?, regiao=?, cidade=?, tel_fixo=?, tel_movel=?, observacao=?, notificacao=?, expira=?, acesso=? WHERE id=?");
+    $stmt->bind_param("ssssssssssii", $nome, $usuario, $email, $uf, $cidade, $telefoneFixo, $telefoneMovel, $observacoes, $notificacoes, $dataExpiracao, $permissao, $id); // Adiciona a permissão na lista de parâmetros
 
     // Executa a query
     if ($stmt->execute()) {
