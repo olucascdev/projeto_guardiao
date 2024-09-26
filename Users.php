@@ -125,7 +125,7 @@
                                     &nome=<?php echo $row['nome']; ?>
                                     &acesso=<?php echo $row['acesso']; ?>
                                     &email=<?php echo $row['email']; ?>
-
+                                    &status=<?php echo $row['ativo']; ?>
                                     
                                     ">
                                     <i class="bi bi-pencil-square me-2"></i>

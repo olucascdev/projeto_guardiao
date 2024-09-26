@@ -166,7 +166,7 @@ include_once 'Controller/conexao.php';
     </script>
     
 
-<script> //não ta chegando no banco de dados porem ta falando que o usuario foi cadastrado
+<script> 
 function enviarFormulario() {
     // Captura os valores dos campos
     var nome = document.getElementById('nome').value;
