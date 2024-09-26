@@ -59,13 +59,13 @@
                     <input type="search" class="form-control w-50" placeholder="Pesquisar por Cód / Email / Nome" id="pesquisar">
                     <button class="btn btn-primary" onclick="searchData()"><i class="bi bi-search"></i></button>
             </div>
-        <div class="row">
-            <div id='' class="col">
+        
+            
                 <!-- Tabela para exibir Users cadastrados -->
-                <table class="table table-light table-hover m-5" border="1" cellspacing = 0 cellpadding = 10>
+                <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing = 0 cellpadding = 10>
                     <thead>
                         <tr>
-                            <th style="width: 10%">Código</th>
+                            <th style="width: 5%">Código</th>
                             <th style="width: 30%">Nome do usuário</th>
                             <th style="width: 15%">Acesso</th>
                             <th style="width: 30%">E-mail</th>
@@ -118,7 +118,7 @@
                         </td>
                           <!-- <td><img src="foto/<?php echo $row['foto']; ?>"  width="64px" title="<?php echo $row['foto']; ?>"> </td>     -->
 
-                            <td class="text-center">
+                            <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
                                     <a href="CadastroUsuarioEdit.php?
                                     &id=<?php echo $row['id']; ?>
@@ -131,7 +131,7 @@
                                     <i class="bi bi-pencil-square me-2"></i>
                                     </a>
                                 
-                            <td >
+                            
                                 <a href="Controller/excluir.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
                             </a>
                             </td>
@@ -163,8 +163,8 @@
                     </ul>
                 </nav>             
                 
-            </div>
-        </div>
+            
+        
 
 </div>
 
