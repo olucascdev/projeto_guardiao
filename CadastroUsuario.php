@@ -28,7 +28,11 @@ include_once 'Controller/conexao.php';
                                 <label for="permissao" class="form-label">Permissão do Usuário</label>
                                 <select class="form-select" id="permissao" required>
                                     <option selected disabled value="">Selecione o nível de permissão</option>
-                                    <option value="">4</option>
+                                    <option value="0" <?php echo (isset($usuario) && $usuario->acesso == 0) ? 'selected' : ''; ?>>Visitante</option>
+                                    <option value="1" <?php echo (isset($usuario) && $usuario->acesso == 1) ? 'selected' : ''; ?>>Usuário</option>
+                                    <option value="2" <?php echo (isset($usuario) && $usuario->acesso == 2) ? 'selected' : ''; ?>>Gestor</option>
+                                    <option value="3" <?php echo (isset($usuario) && $usuario->acesso == 3) ? 'selected' : ''; ?>>Administrador</option>
+                                    <option value="4" <?php echo (isset($usuario) && $usuario->acesso == 4) ? 'selected' : ''; ?>>Master</option>
                                     
                                 </select>
                                 <div class="invalid-feedback">Selecione a permissão.</div>

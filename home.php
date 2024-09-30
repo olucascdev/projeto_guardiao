@@ -30,7 +30,7 @@
       </div>
       <nav>
         <div class="mb-2">
-          <a class="parameter-item" target="frame" href="." role="button" aria-expanded="false" aria-controls="param1Subthemes">
+          <a class="parameter-item" target="frame" href="avaliacoesHome.php" role="button" aria-expanded="false" aria-controls="param1Subthemes">
               <i class="bi bi-newspaper"></i> Avaliações
           </a>
         </div>
