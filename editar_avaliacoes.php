@@ -1,27 +1,28 @@
 <?php 
 include_once 'Controller/conexao.php';
 
-// Verifica se é edição ou novo cadastro
-$codigo = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+// Recebe os dados do formulário
+$codigo = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
 $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS);
 $observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS);
 
-// Define o destino do formulário (salvar)
-$action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
+// Define o destino do formulário
+$action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
+
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></title>
+    <title>Editar Avaliação</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="styles/CadastroUser.css">
 </head>
 <body>
-    <div class="container mt-5">
+<div class="container mt-5">
         <h1 class="text-left mb-4"><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></h1>
 
         <!-- Formulário -->

@@ -35,5 +35,15 @@ body{
     box-shadow: 0.5px 0.5px 3px 0.2px rgba(0, 0, 0, 0.259);
 }
 
+.container {
+    max-width: 90%; /* Alarga o container para ocupar mais espaço */
+    padding: 10px;
+}
+label {
+    font-size: 1rem; /* Aumenta o tamanho da fonte para melhor visualização */
+}
+.form-control, .btn {
+    font-size: 1rem; /* Aumenta o tamanho do input e dos botões */
+}
 
 

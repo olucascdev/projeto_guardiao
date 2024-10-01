@@ -51,7 +51,7 @@
         </div>
             <!-- Seção de Pesquisa -->
             <div class="box-search w-auto">
-                    <a href="/.php"><button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Nova Avaliação</button></a>
+                    <a href="CadastroAvaliacao.php"><button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Nova Avaliação</button></a>
                     <button class="btn btn-warning"><i class="bi bi-printer-fill"></i> Imprimir</button>
                     <button type="button" class="btn btn-info" onclick="atualizarPagina()">
                         <i class="bi bi-arrow-clockwise"></i> Atualizar
@@ -85,14 +85,14 @@
 
                             <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
-                                  <!--  <a href="editar_salvar_avaliacoes.php?
+                                  <a href="editar_avaliacoes.php?
                                     &codigo=<?php echo $row['id']; ?>
-                                    &nome_avalicao=<?php echo $row['nome_avalicao']; ?>
+                                    &nome_avalicao=<?php echo $row['nome_avaliacao']; ?>
                                     &data_cadastro=<?php echo $row['data_cadastro']; ?>
                                     &descricao_avaliacao=<?php echo $row['descricao_avaliacao']; ?>
                                     
                                     
-                                    "> -->
+                                    "> 
                                     <i class="bi bi-pencil-square me-2"></i>
                                     </a>
                                 
@@ -100,10 +100,7 @@
                                 <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
                             </a>
                             </td>
-                           <!-- <td class="text-center">
-                                <i class="bi bi-camera-fill"></i>
-                            </a>
-                            </td> -->
+                           
                         </tr>
                         <?php endforeach;?>                              
 
