@@ -7,6 +7,11 @@ $nome = filter_input(INPUT_POST, "nome_avaliacao", FILTER_SANITIZE_SPECIAL_CHARS
 $data = filter_input(INPUT_POST, "data_cadastro", FILTER_SANITIZE_SPECIAL_CHARS);
 $observacao = filter_input(INPUT_POST, "observacoes", FILTER_SANITIZE_SPECIAL_CHARS);
 
+if (!empty($data_cadastro)) {
+    $data_cadastro = implode("/", array_reverse(explode("-", $data_cadastro)));
+}
+
+
 // Verifica se os campos obrigatórios estão preenchidos
 if (!empty($nome) && !empty($data)) {
     // Verifica se é uma atualização

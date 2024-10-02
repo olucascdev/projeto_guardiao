@@ -78,23 +78,17 @@
                            
                            <td><?php echo $row['id']; ?></td> <!-- Mudar o nome para name caso der erro-->
                            <td><?php echo $row['nome_avaliacao']; ?></td>
-                           <td><?php echo $row['data_cadastro']; ?></td>
+                           <td><?php echo date('d/m/Y', strtotime($row['data_cadastro'])); ?></td>
                            <td><?php echo $row['descricao_avaliacao']; ?></td>
                            
                           <!-- <td><img src="foto/<?php echo $row['foto']; ?>"  width="64px" title="<?php echo $row['foto']; ?>"> </td>     -->
 
                             <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
-                                  <a href="editar_avaliacoes.php?
-                                    &codigo=<?php echo $row['id']; ?>
-                                    &nome_avalicao=<?php echo $row['nome_avaliacao']; ?>
-                                    &data_cadastro=<?php echo $row['data_cadastro']; ?>
-                                    &descricao_avaliacao=<?php echo $row['descricao_avaliacao']; ?>
-                                    
-                                    
-                                    "> 
+                                    <a href="editar_avaliacoes.php?codigo=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>">
                                     <i class="bi bi-pencil-square me-2"></i>
                                     </a>
+
                                 
                             
                                 <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
