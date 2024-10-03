@@ -32,7 +32,7 @@ $action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
     <h1 class="text-left mb-4"><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></h1>
     <div>
         <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
-        <a href=""><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
+        <a href="Colaborador.php"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
     </div>
     <!-- Formulário -->
     <form action="<?php echo $action; ?>" method="post">

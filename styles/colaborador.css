@@ -1,0 +1,17 @@
+.container {
+    max-width: 95%; /* Reduced container width */
+    margin: 0px 0px 0px 0px; /* Centered container */
+    
+   
+}
+
+h3 {
+    margin-top: 20px; /* Espaço acima do título */
+    margin-bottom: -40px; /* Espaço abaixo do título */
+    margin-left: 50px;
+    text-align: left; /* Alinhamento à esquerda */
+}
+
+.table {
+    margin-bottom: 40px; /* Espaço abaixo da tabela */
+}
