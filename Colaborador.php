@@ -1,6 +1,8 @@
 <?php 
 include_once 'Controller/conexao.php';
 
+$query = "SELECT id, nome FROM colaboradores"; 
+$result = mysqli_query($conn1, $query);
 
 ?>
 <!DOCTYPE html>
@@ -24,8 +26,29 @@ include_once 'Controller/conexao.php';
                     </thead>
                     <tbody>
                         <tr>
-                            <td><select class="form-select" name="nome_colaborador" id="nome_colaborador" placeholder="Selecione o Colaborador"></select></td>
-                           <td><a href=""><button class="btn btn-success w-100"><i class="bi bi-plus-circle"></i> Adicionar</button></a></td>
+                            <td>
+                                <select class="form-select" name="nome_colaborador" id="nome_colaborador">
+                                    <option value="">Selecione o Colaborador</option>
+                                <?php 
+                                    // Verifica se houve resultados na consulta
+                                    if(mysqli_num_rows($result) > 0) {
+                                        // Itera sobre os colaboradores retornados e preenche o select
+                                        while($row = mysqli_fetch_assoc($result)) {
+                                            echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+                                        }
+                                    } else {
+                                        echo "<option value=''>Nenhum colaborador encontrado</option>";
+                                    }
+                                    ?>
+
+                                </select>
+                            
+                            
+                            </td>
+
+                           <td>
+                            <button class="btn btn-success w-100"><i class="bi bi-plus-circle"></i> Adicionar</button>
+                            </td>
                         </tr>
                                                      
 
