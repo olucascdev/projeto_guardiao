@@ -108,12 +108,12 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
 </head>
 <body>
     <div class="container">
-        <h3>Vincular Colaborador no Questionário</h3>
-        <div class="text-center mb-3">
+        <div class="botao">
             <a href="avaliacoesHome.php" class="btn btn-primary">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
         </div>
+        <h3>Vincular Colaborador no Questionário</h3>
         <form method="POST" action="">
             <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
                 <thead>
