@@ -10,7 +10,7 @@
     if(!empty($_GET['search']))
     {
         $data = $_GET['search'];
-        $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE id LIKE '%$data%' or nome LIKE '%$data%' ORDER BY id asc");
+        $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE id LIKE '%$data%' or nome_avaliacao LIKE '%$data%' ORDER BY id asc");
     }else{
         $rows = mysqli_query($conn, "SELECT * FROM avaliacao ORDER BY id asc");
     }
@@ -22,7 +22,7 @@
     // Filtra os dados para a página atual
     if(!empty($_GET['search']))
     {
-        $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE id LIKE '%$data%' or nome LIKE '%$data%' ORDER BY id asc LIMIT $inicio, $itens_por_pagina");
+        $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE id LIKE '%$data%' or nome_avaliacao LIKE '%$data%' ORDER BY id asc LIMIT $inicio, $itens_por_pagina");
     }else{
         $rows = mysqli_query($conn, "SELECT * FROM avaliacao ORDER BY id asc LIMIT $inicio, $itens_por_pagina");
     }

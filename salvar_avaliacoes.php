@@ -47,6 +47,7 @@ if (empty($codigo)) {
     $update_avaliacao = "UPDATE avaliacao SET data_cadastro='$data_cadastro', nome_avaliacao='$nome_avaliacao', descricao_avaliacao='$observacoes' WHERE id='$codigo'";
     if (mysqli_query($conn, $update_avaliacao)) {
         echo "Avaliação atualizada com sucesso!";
+        header("Location: avaliacoesHome.php");
     } else {
         echo "Erro ao atualizar avaliação: " . mysqli_error($conn);
     }
