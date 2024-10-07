@@ -1,11 +1,18 @@
 <?php 
 include_once 'Controller/conexao.php';
 
+if (isset($_SESSION['vinculados'])) {
+    unset($_SESSION['vinculados']);
+}
+
 // Recebe os dados do formulário via GET (valores passados pela URL)
 $codigo = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
 $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS);
 $observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS);
+
+$codigo_avaliacao = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
+
 
 // Aqui NÃO convertemos a data para o formato dd/mm/yyyy, pois o input date requer o formato YYYY-MM-DD
 // Verifica se a data_cadastro foi fornecida e está no formato correto
@@ -32,7 +39,7 @@ $action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
     <h1 class="text-left mb-4"><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></h1>
     <div>
         <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
-        <a href="Colaborador.php"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
+        <a href="Colaborador.php?codigo=<?php echo $codigo; ?>"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
     </div>
     <!-- Formulário -->
     <form action="<?php echo $action; ?>" method="post">

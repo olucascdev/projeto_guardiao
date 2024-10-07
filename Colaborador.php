@@ -2,15 +2,24 @@
 session_start(); // Inicia a sessão
 include_once 'Controller/conexao.php';
 
+$codigo_avaliacao = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
+
+// Limpa a lista de colaboradores vinculados ao mudar a avaliação
+if (!isset($_SESSION['vinculados'])) {
+    $_SESSION['vinculados'] = []; // Inicializa a sessão 'vinculados' se não estiver definida
+}
+
+// Verifica se houve uma nova avaliação carregada
+if (isset($_SESSION['codigo_atual']) && $_SESSION['codigo_atual'] != $codigo_avaliacao) {
+    unset($_SESSION['vinculados']); // Limpa os colaboradores vinculados
+}
+
+$_SESSION['codigo_atual'] = $codigo_avaliacao; // Armazena o código da avaliação atual
+
 // Define quantos colaboradores vinculados por página
 $por_pagina = 3; // Ajuste conforme necessário
 $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina - 1) * $por_pagina;
-
-// Para armazenar colaboradores vinculados
-if (!isset($_SESSION['vinculados'])) {
-    $_SESSION['vinculados'] = [];
-}
 
 // Verifica se houve uma inserção
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -36,10 +45,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (!$is_vinculado) {
                     // Insere os dados na tabela 'avaliacao_estabelecimento_colaborador'
-                    $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (colaborador_id, colaborador_telmovel, colaborador_email) 
-                                     VALUES ('$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}')";
+                    $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) 
+                                     VALUES ('$codigo_avaliacao', '$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}')";
                     mysqli_query($conn, $insert_query);
-
+                
                     // Adiciona à lista de vinculados na sessão
                     $_SESSION['vinculados'][] = [
                         'id' => $colaborador_id,
@@ -66,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $excluir_id = filter_input(INPUT_POST, 'excluir_id', FILTER_SANITIZE_NUMBER_INT);
 
         // Remove o colaborador da tabela 'avaliacao_estabelecimento_colaborador'
-        $delete_query = "DELETE FROM avaliacao_estabelecimento_colaborador WHERE colaborador_id = $excluir_id";
+        $delete_query = "DELETE FROM avaliacao_estabelecimento_colaborador WHERE colaborador_id = $excluir_id AND avaliacao_estabelecimento_id = $codigo_avaliacao";
         mysqli_query($conn, $delete_query);
 
         // Remove o colaborador da lista de vinculados
@@ -80,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Armazena os colaboradores vinculados
-$vinculados = $_SESSION['vinculados'];
+$vinculados = isset($_SESSION['vinculados']) ? $_SESSION['vinculados'] : []; // Verifica se 'vinculados' está definido na sessão
 
 // Paginação dos colaboradores vinculados
 $total_vinculados = count($vinculados);
@@ -188,7 +197,5 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
             </ul>
         </nav>
     </div>
-           
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
