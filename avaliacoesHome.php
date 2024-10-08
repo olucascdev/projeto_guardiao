@@ -51,6 +51,9 @@
         </div>
             <!-- Seção de Pesquisa -->
             <div class="box-search w-auto">
+            
+                     <a href="avaliacao_estabelecimento.php" class="btn btn-primary">
+                        <i class="bi bi-arrow-left"></i> Voltar</a>
                     <a href="CadastroAvaliacao.php"><button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Nova Avaliação</button></a>
                     <button class="btn btn-warning"><i class="bi bi-printer-fill"></i> Imprimir</button>
                     <button type="button" class="btn btn-info" onclick="atualizarPagina()">

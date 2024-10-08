@@ -51,7 +51,7 @@
         </div>
             <!-- Seção de Pesquisa -->
             <div class="box-search w-auto">
-                    <a href="CadastroAvaliacao.php"><button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Novo Estabelecimento</button></a>
+                    <a href="CadastroEstabelecimento.php"><button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Novo Estabelecimento</button></a>
                     <button type="button" class="btn btn-info" onclick="atualizarPagina()">
                         <i class="bi bi-arrow-clockwise"></i> Atualizar
                     </button>   
@@ -78,20 +78,29 @@
                            <td><?php echo $row['id']; ?></td> <!-- Mudar o nome para name caso der erro-->
                            <td><?php echo $row['estabelecimento']; ?></td>
                            <td><?php echo $row['abrev'] ?></td>
-                           <td><?php echo $row['ativo']; ?></td>
+                           <td> 
+                            <?php 
+                                 if ($row['ativo'] == 1) {
+                                    echo 'ATIVO';
+                                } else {
+                                    echo 'DESATIVADO';
+                                }
+                            ?>
+                            </td>
                            
                           <!-- <td><img src="foto/<?php echo $row['foto']; ?>"  width="64px" title="<?php echo $row['foto']; ?>"> </td>     -->
 
                             <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
-                                    <a href="editar_avaliacoes.php?codigo=<?php echo $row['id']; ?>&estabelecimento=<?php echo urlencode($row['estabelecimento']); ?>&abrev=<?php echo $row['abrev']; ?>&ativo=<?php echo urlencode($row['ativo']); ?>">
+                                    <a href="editar_estabelecimento.php?codigo=<?php echo $row['id']; ?>&estabelecimento=<?php echo urlencode($row['estabelecimento']); ?>&abrev=<?php echo $row['abrev']; ?>&ativo=<?php echo urlencode($row['ativo']); ?>">
                                     <i class="bi bi-pencil-square me-2"></i>
                                     </a>
 
                                 
                             
-                                <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
+                                <a href="excluir_estabelecimento.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
                             </a>
+                            <a href="avaliacoesHome.php"><i class="bi bi-box-arrow-in-right"></i></a>
                             </td>
                            
                         </tr>
