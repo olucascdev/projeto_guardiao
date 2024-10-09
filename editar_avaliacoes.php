@@ -11,8 +11,8 @@ $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPEC
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS);
 $observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS);
 
-$codigo_avaliacao = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
-
+// Recebe o estabelecimento_id da URL
+$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT);
 
 // Aqui NÃO convertemos a data para o formato dd/mm/yyyy, pois o input date requer o formato YYYY-MM-DD
 // Verifica se a data_cadastro foi fornecida e está no formato correto
@@ -22,6 +22,12 @@ if (!empty($data_cadastro)) {
 
 // Define o destino do formulário
 $action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
+
+// Consulta para obter a abreviação da unidade
+$query_estabelecimento = "SELECT abrev FROM estabelecimentos WHERE id = $estabelecimento_id";
+$result_estabelecimento = mysqli_query($conn, $query_estabelecimento);
+$unidade = mysqli_fetch_assoc($result_estabelecimento);
+$abrev = $unidade['abrev'] ?? ''; // Armazena a abreviação da unidade, ou vazio se não encontrado
 ?>
 
 <!DOCTYPE html>
@@ -36,15 +42,17 @@ $action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="text-left mb-4"><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></h1>
+    <h1 class="text-left mb-4"><?php echo "Avaliação: $nome_avaliacao - $abrev"; ?></h1>
     <div>
         <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
-        <a href="Colaborador.php?codigo=<?php echo $codigo; ?>"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
+        <a href="Colaborador.php?codigo=<?php echo $codigo; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>"><button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button></a>
     </div>
     <!-- Formulário -->
     <form action="<?php echo $action; ?>" method="post">
         <!-- Campo oculto para armazenar o ID da avaliação (caso seja edição) -->
         <input type="hidden" name="codigo" value="<?php echo $codigo; ?>">
+        <!-- Campo oculto para armazenar o ID do estabelecimento -->
+        <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
 
         <div class="row">
             <div class="col-md-12 mb-4">
@@ -71,7 +79,7 @@ $action = "salvar_avaliacoes.php"; // Salvar na mesma página que você já tem
             <div class="col-md-12 d-flex justify-content-start">
                 <button class="btn btn-success p-3 m-2" type="submit">Salvar</button>
                 <button class="btn btn-warning p-3 m-2" type="reset">Limpar</button>
-                <a href="avaliacoesHome.php" class="btn btn-danger p-3 m-2">Cancelar</a>
+                <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2">Cancelar</a>
             </div>
         </div>
     </form>

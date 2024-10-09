@@ -40,8 +40,8 @@
           </a>
         </div>
         <div class="mb-2">
-          <a class="parameter-item"  href="#param3Subthemes" role="button" aria-expanded="false" aria-controls="param3Subthemes">
-            <i class="bi bi-gear-fill"></i> Parametro 3
+          <a class="parameter-item"  href="avaliacao_unidades.php" target="frame" role="button" aria-expanded="false" aria-controls="param3Subthemes">
+            <i class="bi bi-building"></i> Unidades
           </a>
         </div>
         <div class="mb-2">

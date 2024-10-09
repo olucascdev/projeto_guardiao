@@ -6,20 +6,20 @@ include_once 'Controller/conexao.php';
 $avaliacaoId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
 if ($avaliacaoId > 0) {
-    // Cria a consulta SQL para recuperar o nome da imagem associada ao usuário
+    // Cria a consulta SQL para recuperar a avaliação, incluindo o estabelecimento_id
     $sql = "SELECT * FROM avaliacao WHERE id = $avaliacaoId";
     $resultado = mysqli_query($conn, $sql);
 
     if ($resultado && $linha = mysqli_fetch_assoc($resultado)) {
+        $estabelecimentoId = $linha['estabelecimento_id']; // Armazena o estabelecimento_id
+
         $sqlDelete = "DELETE FROM avaliacao WHERE id = $avaliacaoId";
         if (mysqli_query($conn, $sqlDelete)) {
-            // Verifica se o arquivo da imagem existe e exclui
-
             // Exibe mensagem de sucesso e redireciona
             echo "
                 <script>
-                    alert('Usuário excluído com sucesso');
-                    window.location.href='../projeto_guardiao/avaliacoesHome.php';
+                    alert('Avaliação excluída com sucesso');
+                    window.location.href='../projeto_guardiao/avaliacoesHome.php?estabelecimento_id=$estabelecimentoId';
                 </script>
             ";
         } else {
@@ -32,10 +32,10 @@ if ($avaliacaoId > 0) {
             ";
         }
     } else {
-        // Se não encontrar o usuário
+        // Se não encontrar a avaliação
         echo "
             <script>
-                alert('Usuário não encontrado');
+                alert('Avaliação não encontrada');
                 window.location.href='../projeto_guardiao/avaliacoesHome.php';
             </script>
         ";

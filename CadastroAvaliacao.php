@@ -6,6 +6,8 @@ $codigo = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
 $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS);
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS);
 $observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS);
+$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT);
+
 
 // Define o destino do formulário (salvar)
 $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
@@ -28,6 +30,7 @@ $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
         <form action="<?php echo $action; ?>" method="post">
             <!-- Campo oculto para armazenar o ID da avaliação (caso seja edição) -->
             <input type="hidden" name="codigo" value="<?php echo $codigo; ?>">
+            <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
 
             <div class="row">
                 <div class="col-md-12 mb-4">
@@ -53,7 +56,7 @@ $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
                 <div class="col-md-12 d-flex justify-content-start">
                     <button class="btn btn-success p-3 m-2" type="submit">Salvar</button>
                     <button class="btn btn-warning p-3 m-2" type="reset">Limpar</button>
-                    <a href="avaliacoesHome.php" class="btn btn-danger p-3 m-2">Cancelar</a>
+                    <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2">Cancelar</a>
                 </div>
             </div>
         </form>
