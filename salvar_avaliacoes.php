@@ -1,4 +1,5 @@
 <?php
+session_start(); // Inicie a sessão se ainda não estiver iniciada
 include_once 'Controller/conexao.php';
 
 // Recebe os dados do formulário
@@ -22,7 +23,6 @@ if (empty($codigo)) {
         $avaliacao_id = mysqli_insert_id($conn);
 
         // Aqui, você deve inserir os colaboradores vinculados
-        // Certifique-se de que a sessão de colaboradores vinculados exista e tenha dados
         if (isset($_SESSION['vinculados']) && !empty($_SESSION['vinculados'])) {
             foreach ($_SESSION['vinculados'] as $vinculado) {
                 $colaborador_id = $vinculado['id'];
@@ -48,7 +48,29 @@ if (empty($codigo)) {
 } else {
     // Lógica para edição de avaliações
     $update_avaliacao = "UPDATE avaliacao SET data_cadastro='$data_cadastro', nome_avaliacao='$nome_avaliacao', descricao_avaliacao='$observacoes', estabelecimento_id='$estabelecimento_id' WHERE id='$codigo'";
+    
     if (mysqli_query($conn, $update_avaliacao)) {
+        // Limpa a tabela de colaboradores vinculados antes de atualizar
+        $delete_colaboradores = "DELETE FROM avaliacao_estabelecimento_colaborador WHERE avaliacao_estabelecimento_id='$codigo'";
+        mysqli_query($conn, $delete_colaboradores);
+
+        // Insere os colaboradores vinculados novamente
+        if (isset($_SESSION['vinculados']) && !empty($_SESSION['vinculados'])) {
+            foreach ($_SESSION['vinculados'] as $vinculado) {
+                $colaborador_id = $vinculado['id'];
+                $tel_movel = $vinculado['tel_movel'];
+                $email = $vinculado['email'];
+
+                // Inserir na tabela avaliacao_estabelecimento_colaborador
+                $insert_colaborador = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) VALUES ('$codigo', '$colaborador_id', '$tel_movel', '$email')";
+                if (!mysqli_query($conn, $insert_colaborador)) {
+                    echo "Erro ao vincular colaborador: " . mysqli_error($conn);
+                }
+            }
+        } else {
+            echo "Nenhum colaborador vinculado para inserir.";
+        }
+
         echo "Avaliação atualizada com sucesso!";
         header("Location: avaliacoesHome.php?estabelecimento_id=$estabelecimento_id");
         exit();

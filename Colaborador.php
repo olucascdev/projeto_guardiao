@@ -1,8 +1,10 @@
 <?php 
-session_start(); // Inicia a sessão
-include_once 'Controller/conexao.php';
+session_start(); // Inicia a sessão para gerenciar dados do usuário entre requisições.
+include_once 'Controller/conexao.php'; // Inclui o arquivo de conexão com o banco de dados.
 
+// Filtra e obtém o código da avaliação e o ID do estabelecimento da URL.
 $codigo_avaliacao = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
+$id_estabelecimento = filter_input(INPUT_GET, 'estabelecimento', FILTER_SANITIZE_NUMBER_INT); // Adiciona o ID do estabelecimento
 
 // Limpa a lista de colaboradores vinculados ao mudar a avaliação
 if (!isset($_SESSION['vinculados'])) {
@@ -11,45 +13,45 @@ if (!isset($_SESSION['vinculados'])) {
 
 // Verifica se houve uma nova avaliação carregada
 if (isset($_SESSION['codigo_atual']) && $_SESSION['codigo_atual'] != $codigo_avaliacao) {
-    unset($_SESSION['vinculados']); // Limpa os colaboradores vinculados
+    unset($_SESSION['vinculados']); // Limpa os colaboradores vinculados se a avaliação foi mudada
 }
 
-$_SESSION['codigo_atual'] = $codigo_avaliacao; // Armazena o código da avaliação atual
+// Armazena o código da avaliação atual na sessão
+$_SESSION['codigo_atual'] = $codigo_avaliacao; 
 
-// Define quantos colaboradores vinculados por página
+// Define quantos colaboradores vinculados serão exibidos por página
 $por_pagina = 3; // Ajuste conforme necessário
-$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-$offset = ($pagina - 1) * $por_pagina;
+$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1; // Obtém o número da página atual ou define como 1
+$offset = ($pagina - 1) * $por_pagina; // Calcula o deslocamento para a consulta
 
-// Verifica se houve uma inserção
+// Verifica se houve uma inserção de um novo colaborador
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['colaborador_id'])) {
         $colaborador_id = filter_input(INPUT_POST, 'colaborador_id', FILTER_SANITIZE_NUMBER_INT);
         
         // Verifica se o ID do colaborador é válido
         if ($colaborador_id) {
-            // Obtém detalhes do colaborador
+            // Obtém detalhes do colaborador a partir da tabela colaboradores
             $col_query = "SELECT nome, tel_movel, email FROM colaboradores WHERE id = $colaborador_id";
             $col_result = mysqli_query($conn1, $col_query);
             
             if ($colaborador = mysqli_fetch_assoc($col_result)) { // Verifica se retornou algum resultado
-                
                 // Verifica se o colaborador já está vinculado
                 $is_vinculado = false;
                 foreach ($_SESSION['vinculados'] as $vinculado) {
                     if ($vinculado['id'] == $colaborador_id) {
-                        $is_vinculado = true;
+                        $is_vinculado = true; // O colaborador já está vinculado
                         break;
                     }
                 }
 
-                if (!$is_vinculado) {
-                    // Insere os dados na tabela 'avaliacao_estabelecimento_colaborador'
+                if (!$is_vinculado) { // Se não está vinculado
+                    // Insere os dados do colaborador na tabela de vinculação
                     $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) 
                                      VALUES ('$codigo_avaliacao', '$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}')";
-                    mysqli_query($conn, $insert_query);
+                    mysqli_query($conn, $insert_query); // Executa a inserção
                 
-                    // Adiciona à lista de vinculados na sessão
+                    // Adiciona à lista de colaboradores vinculados na sessão
                     $_SESSION['vinculados'][] = [
                         'id' => $colaborador_id,
                         'nome' => $colaborador['nome'],
@@ -57,64 +59,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'email' => $colaborador['email']
                     ];
                 } else {
-                    // Se o colaborador já está vinculado, você pode definir uma mensagem de erro
+                    // Se o colaborador já está vinculado, mostra uma mensagem de erro
                     echo "<script>alert('Colaborador já está vinculado.');</script>";
                 }
             } else {
-                // Se não encontrou o colaborador, você pode definir uma mensagem de erro
+                // Se não encontrou o colaborador, mostra uma mensagem de erro
                 echo "<script>alert('Colaborador não encontrado.');</script>";
             }
         } else {
-            // Se o ID não é válido, você pode definir uma mensagem de erro
+            // Se o ID não é válido, mostra uma mensagem de erro
             echo "<script>alert('Selecione um colaborador válido.');</script>";
         }
     }
 
-    // Verifica se houve uma exclusão
+    // Verifica se houve uma exclusão de um colaborador
     if (isset($_POST['excluir_id'])) {
         $excluir_id = filter_input(INPUT_POST, 'excluir_id', FILTER_SANITIZE_NUMBER_INT);
 
         // Remove o colaborador da tabela 'avaliacao_estabelecimento_colaborador'
         $delete_query = "DELETE FROM avaliacao_estabelecimento_colaborador WHERE colaborador_id = $excluir_id AND avaliacao_estabelecimento_id = $codigo_avaliacao";
-        mysqli_query($conn, $delete_query);
+        mysqli_query($conn, $delete_query); // Executa a exclusão
 
-        // Remove o colaborador da lista de vinculados
+        // Remove o colaborador da lista de vinculados na sessão
         foreach ($_SESSION['vinculados'] as $key => $vinculado) {
             if ($vinculado['id'] == $excluir_id) {
-                unset($_SESSION['vinculados'][$key]);
+                unset($_SESSION['vinculados'][$key]); // Remove da sessão
                 break;
             }
         }
     }
 }
 
-// Armazena os colaboradores vinculados
+// Armazena os colaboradores vinculados na variável
 $vinculados = isset($_SESSION['vinculados']) ? $_SESSION['vinculados'] : []; // Verifica se 'vinculados' está definido na sessão
 
 // Paginação dos colaboradores vinculados
-$total_vinculados = count($vinculados);
-$total_paginas = ceil($total_vinculados / $por_pagina);
-$vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
+$total_vinculados = count($vinculados); // Total de colaboradores vinculados
+$total_paginas = ceil($total_vinculados / $por_pagina); // Calcula o total de páginas
+$vinculados_pagina = array_slice($vinculados, $offset, $por_pagina); // Obtém os colaboradores da página atual
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="styles/colaborador.css">
-    <title>Colaboradores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Inclui o CSS do Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"> <!-- Inclui ícones do Bootstrap -->
+    <link rel="stylesheet" href="styles/colaborador.css"> <!-- Inclui CSS personalizado -->
+    <title>Colaboradores</title> <!-- Título da página -->
 </head>
 <body>
-    <div class="container">
+    <div class="container"> <!-- Contêiner principal -->
         <div class="botao">
-            <a href="avaliacoesHome.php" class="btn btn-primary">
+            <!-- Botão "Voltar" com os parâmetros de avaliação e estabelecimento na URL -->
+            <a href="editar_avaliacoes.php?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>" class="btn btn-primary">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
         </div>
         <h3>Vincular Colaborador no Questionário</h3>
-        <form method="POST" action="">
+        <form method="POST" action=""> <!-- Formulário para adicionar colaboradores -->
             <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
                 <thead>
                     <tr>
@@ -125,7 +128,7 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-select" name="colaborador_id" id="nome_colaborador">
+                            <select class="form-select" name="colaborador_id" id="nome_colaborador"> <!-- Select para escolher um colaborador -->
                                 <option value="">Selecione o Colaborador</option>
                                 <?php 
                                 // Consulta para obter colaboradores
@@ -139,13 +142,13 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
                                         echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
                                     }
                                 } else {
-                                    echo "<option value=''>Nenhum colaborador encontrado</option>";
+                                    echo "<option value=''>Nenhum colaborador encontrado</option>"; // Mensagem se não houver colaboradores
                                 }
                                 ?>
                             </select>
                         </td>
                         <td>
-                            <button class="btn btn-success w-100" type="submit"><i class="bi bi-plus-circle"></i> Adicionar</button>
+                            <button class="btn btn-success w-100" type="submit"><i class="bi bi-plus-circle"></i> Adicionar</button> <!-- Botão para adicionar colaborador -->
                         </td>
                     </tr>
                 </tbody>
@@ -153,52 +156,48 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
         </form>
 
         <h3>Colaboradores Vinculados ao Questionário</h3>
-        <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
+        <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10"> <!-- Tabela para exibir colaboradores vinculados -->
             <thead>
                 <tr>
-                    <th>Colaborador</th>
+                    <th>Nome</th>
                     <th width="12%">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <?php 
-                // Mostra os colaboradores vinculados na página atual
-                foreach ($vinculados_pagina as $vinculado) {
-                    echo "<tr>
-                            <td>{$vinculado['nome']}</td>
-                            <td>
-                                <form method='POST' action=''>
-                                    <input type='hidden' name='excluir_id' value='{$vinculado['id']}'>
-                                    <button class='btn btn-danger w-100' type='submit'><i class='bi bi-trash3'></i> Excluir</button>
-                                </form>
-                            </td>
-                          </tr>";
-                }
-                ?>
+                <?php foreach ($vinculados_pagina as $vinculado): ?> <!-- Itera sobre os colaboradores vinculados para exibição -->
+                    <tr>
+                        <td><?= htmlspecialchars($vinculado['nome'], ENT_QUOTES); ?></td> <!-- Nome do colaborador -->
+                        <td>
+                            <form method="POST" action="" class="excluir-form"> <!-- Formulário para excluir colaborador -->
+                                <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>"> <!-- ID do colaborador a ser excluído -->
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?');"><i class="bi bi-trash"></i> Excluir</button> <!-- Botão para excluir colaborador -->
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
-        <!-- Paginação -->
-        <nav aria-label="Page navigation">
+        <!-- Navegação de paginação -->
+        <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item <?= ($pagina == 1) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $pagina - 1 ?>" aria-label="Anterior">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <?php 
-                for ($i = 1; $i <= $total_paginas; $i++): 
-                    $active = ($i == $pagina) ? 'active' : '';
-                ?>
-                    <li class="page-item <?= $active ?>">
-                        <a class="page-link" href="?pagina=<?= $i ?>"><?= $i ?></a>
+                <?php if ($pagina > 1): ?> <!-- Se não estiver na primeira página -->
+                    <li class="page-item">
+                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $pagina - 1; ?>">Anterior</a> <!-- Botão "Anterior" -->
+                    </li>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_paginas; $i++): ?> <!-- Itera sobre o total de páginas -->
+                    <li class="page-item <?= $i === $pagina ? 'active' : ''; ?>">
+                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $i; ?>"><?= $i; ?></a> <!-- Botões de página -->
                     </li>
                 <?php endfor; ?>
-                <li class="page-item <?= ($pagina == $total_paginas) ? 'disabled' : '' ?>">
-                    <a class="page-link" href="?pagina=<?= $pagina + 1 ?>" aria-label="Próximo">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
+
+                <?php if ($pagina < $total_paginas): ?> <!-- Se não estiver na última página -->
+                    <li class="page-item">
+                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $pagina + 1; ?>">Próximo</a> <!-- Botão "Próximo" -->
+                    </li>
+                <?php endif; ?>
             </ul>
         </nav>
     </div>
