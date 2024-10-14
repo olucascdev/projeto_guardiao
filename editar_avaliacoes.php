@@ -5,8 +5,10 @@ include_once 'Controller/conexao.php';
 // Verifica se o estabelecimento_id foi fornecido na URL, sanitizando a entrada
 $estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT);
 
-// Recebe os dados do formulário via GET (valores passados pela URL), sanitizando as entradas
-$codigo = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
+// Recebe os dados do formulário via GEsT (valores passados pela URL), sanitizando as entradas
+if (isset($_GET['codigo_avaliacao'])) {
+    $codigo_avaliacao = $_GET['codigo_avaliacao']; // Captura o valor de 'codigo'
+}
 $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
 $observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
@@ -54,13 +56,13 @@ $stmt->close(); // Fecha a declaração preparada
     <div>
         <!-- Botões para adicionar questionário e colaborador -->
         <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
-        <a href="Colaborador.php?codigo=<?php echo $codigo; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
+        <a href="Colaborador.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
             <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button>
         </a>
     </div>
     <!-- Formulário para editar avaliação -->
     <form action="<?php echo $action; ?>" method="post">
-        <input type="hidden" name="codigo" value="<?php echo $codigo; ?>"> <!-- Campo oculto para código -->
+        <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> <!-- Campo oculto para código -->
         <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>"> <!-- Campo oculto para ID do estabelecimento -->
 
         <div class="row"> <!-- Início da linha do formulário -->

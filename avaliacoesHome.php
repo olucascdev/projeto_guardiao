@@ -106,7 +106,7 @@ $result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
                 <td><?php echo $row['descricao_avaliacao']; ?></td> <!-- Exibe a descrição da avaliação -->
                 <td class="text-center d-flex justify-content-center">
                     <!-- Botão de Editar -->
-                    <a href="editar_avaliacoes.php?codigo=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
+                    <a href="editar_avaliacoes.php?codigo_avaliacao=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
                         <i class="bi bi-pencil-square me-2"></i> <!-- Ícone de editar -->
                     </a>
                     <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">

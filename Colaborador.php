@@ -2,9 +2,13 @@
 session_start(); // Inicia a sessão para gerenciar dados do usuário entre requisições.
 include_once 'Controller/conexao.php'; // Inclui o arquivo de conexão com o banco de dados.
 
-// Filtra e obtém o código da avaliação e o ID do estabelecimento da URL.
-$codigo_avaliacao = filter_input(INPUT_GET, 'codigo', FILTER_SANITIZE_NUMBER_INT);
-$id_estabelecimento = filter_input(INPUT_GET, 'estabelecimento', FILTER_SANITIZE_NUMBER_INT); // Adiciona o ID do estabelecimento
+if (isset($_GET['codigo_avaliacao'])) {
+    $codigo_avaliacao = $_GET['codigo_avaliacao']; // Captura o valor de 'codigo'
+}
+$nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
+$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT); // Adiciona o ID do estabelecimento
+$data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
+$observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
 
 // Limpa a lista de colaboradores vinculados ao mudar a avaliação
 if (!isset($_SESSION['vinculados'])) {
@@ -16,7 +20,6 @@ if (isset($_SESSION['codigo_atual']) && $_SESSION['codigo_atual'] != $codigo_ava
     unset($_SESSION['vinculados']); // Limpa os colaboradores vinculados se a avaliação foi mudada
 }
 
-// Armazena o código da avaliação atual na sessão
 $_SESSION['codigo_atual'] = $codigo_avaliacao; 
 
 // Define quantos colaboradores vinculados serão exibidos por página
@@ -112,7 +115,7 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina); // Obtém o
     <div class="container"> <!-- Contêiner principal -->
         <div class="botao">
             <!-- Botão "Voltar" com os parâmetros de avaliação e estabelecimento na URL -->
-            <a href="editar_avaliacoes.php?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>" class="btn btn-primary">
+            <a href="editar_avaliacoes.php?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>" class="btn btn-primary">
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
         </div>
@@ -148,7 +151,11 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina); // Obtém o
                             </select>
                         </td>
                         <td>
-                            <button class="btn btn-success w-100" type="submit"><i class="bi bi-plus-circle"></i> Adicionar</button> <!-- Botão para adicionar colaborador -->
+                             <!-- Botão para adicionar colaborador -->
+                            <button class="btn btn-success w-100" type="submit" onclick="adicionarParametrosNaUrl()">
+                        <i class="bi bi-plus-circle"></i> Adicionar
+                        </button>
+
                         </td>
                     </tr>
                 </tbody>
@@ -183,23 +190,33 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina); // Obtém o
             <ul class="pagination justify-content-center">
                 <?php if ($pagina > 1): ?> <!-- Se não estiver na primeira página -->
                     <li class="page-item">
-                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $pagina - 1; ?>">Anterior</a> <!-- Botão "Anterior" -->
+                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $pagina - 1; ?>">Anterior</a> <!-- Botão "Anterior" -->
                     </li>
                 <?php endif; ?>
 
                 <?php for ($i = 1; $i <= $total_paginas; $i++): ?> <!-- Itera sobre o total de páginas -->
                     <li class="page-item <?= $i === $pagina ? 'active' : ''; ?>">
-                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $i; ?>"><?= $i; ?></a> <!-- Botões de página -->
+                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $i; ?>"><?= $i; ?></a> <!-- Botões de página -->
                     </li>
                 <?php endfor; ?>
 
                 <?php if ($pagina < $total_paginas): ?> <!-- Se não estiver na última página -->
                     <li class="page-item">
-                        <a class="page-link" href="?codigo=<?= $codigo_avaliacao; ?>&estabelecimento=<?= $id_estabelecimento; ?>&pagina=<?= $pagina + 1; ?>">Próximo</a> <!-- Botão "Próximo" -->
+                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $pagina + 1; ?>">Próximo</a> <!-- Botão "Próximo" -->
                     </li>
                 <?php endif; ?>
             </ul>
         </nav>
+
     </div>
+    <script>
+        function adicionarParametrosNaUrl() {
+            // Obtém o formulário
+            var form = document.getElementById('form-adicionar');
+            
+            // Ajusta o atributo 'action' para incluir os parâmetros na URL
+            form.action = form.action + '?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>';
+        }
+    </script>
 </body>
 </html>
