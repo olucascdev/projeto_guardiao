@@ -40,7 +40,13 @@ $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
                 </div>
                 <div class="col-md-12 mb-4">
                     <label for="data_cadastro" class="form-label">Data Cadastro Avaliação</label>
-                    <input type="date" class="form-control" id="data_cadastro" name="data_cadastro" value="<?php echo $data_cadastro; ?>" required>
+
+                    <?php
+                    // Define a data atual no formato 'Y-m-d'
+                    $data_atual = date('Y-m-d');
+                    ?>
+
+                    <input type="date" class="form-control" id="data_cadastro" name="data_cadastro" value="<?php echo isset($data_cadastro) ? $data_cadastro : $data_atual; ?>" required>
                 </div>
             </div>
 
