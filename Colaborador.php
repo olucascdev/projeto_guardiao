@@ -122,11 +122,13 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
                 <tbody>
                     <tr>
                         <td>
-                            <select class="form-select" name="colaborador_id" id="nome_colaborador"> <!-- Select para escolher um colaborador -->
-                                <option value="">Selecione o Colaborador</option>
-                                <?php 
-                                // Consulta para obter colaboradores
-                                $query = "SELECT id, nome FROM colaboradores"; 
+                        <select class="form-select" name="colaborador_id" id="nome_colaborador">
+                            <option value="">Selecione o Colaborador</option>
+                            <?php 
+                            // Certifique-se de que $estabelecimento_id foi definido antes
+                            if (isset($estabelecimento_id)) {
+                                // Consulta para obter colaboradores do estabelecimento específico
+                                $query = "SELECT id, nome FROM colaboradores WHERE unidade_id = $estabelecimento_id ORDER BY nome ASC"; 
                                 $result = mysqli_query($conn1, $query);
                                 
                                 // Verifica se houve resultados na consulta
@@ -138,8 +140,11 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
                                 } else {
                                     echo "<option value=''>Nenhum colaborador encontrado</option>"; // Mensagem se não houver colaboradores
                                 }
-                                ?>
-                            </select>
+                            } else {
+                                echo "<option value=''>Estabelecimento não definido</option>";
+                            }
+                            ?>
+                        </select>
                         </td>
                         <td>
                              <!-- Botão para adicionar colaborador -->
