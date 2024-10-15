@@ -1,7 +1,7 @@
 <?php 
 // Inclui a conexão com o banco de dados
 include_once 'Controller/conexao.php';
-
+session_start();
 // Verifica se o estabelecimento_id foi fornecido na URL, sanitizando a entrada
 $estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT);
 
@@ -55,7 +55,9 @@ $stmt->close(); // Fecha a declaração preparada
     <h1 class="text-left mb-4"><?php echo "Avaliação: " . htmlspecialchars($nome_avaliacao, ENT_QUOTES) . " - " . htmlspecialchars($abrev, ENT_QUOTES); ?></h1> <!-- Título da avaliação -->
     <div>
         <!-- Botões para adicionar questionário e colaborador -->
-        <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
+        <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
+            <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
+        </a>
         <a href="Colaborador.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
             <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button>
         </a>
