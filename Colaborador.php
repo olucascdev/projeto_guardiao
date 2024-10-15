@@ -1,105 +1,96 @@
 <?php 
-session_start(); // Inicia a sessão para gerenciar dados do usuário entre requisições.
-include_once 'Controller/conexao.php'; // Inclui o arquivo de conexão com o banco de dados.
+session_start();
+include_once 'Controller/conexao.php'; 
 
 if (isset($_GET['codigo_avaliacao'])) {
-    $codigo_avaliacao = $_GET['codigo_avaliacao']; // Captura o valor de 'codigo'
+    $codigo_avaliacao = $_GET['codigo_avaliacao']; // Captura o valor de 'codigo_avaliacao'
 }
 $nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
-$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT); // Adiciona o ID do estabelecimento
+$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT); 
 $data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
-$observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
+$observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
 
-// Limpa a lista de colaboradores vinculados ao mudar a avaliação
-if (!isset($_SESSION['vinculados'])) {
-    $_SESSION['vinculados'] = []; // Inicializa a sessão 'vinculados' se não estiver definida
+// Inicializa a sessão de vinculados para a combinação atual de avaliação e estabelecimento
+if (!isset($_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id])) {
+    $_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id] = []; // Inicializa se ainda não existir
 }
 
-// Verifica se houve uma nova avaliação carregada
-if (isset($_SESSION['codigo_atual']) && $_SESSION['codigo_atual'] != $codigo_avaliacao) {
-    unset($_SESSION['vinculados']); // Limpa os colaboradores vinculados se a avaliação foi mudada
-}
+// Armazena o código e o ID do estabelecimento atuais na sessão
+$_SESSION['codigo_atual'] = $codigo_avaliacao;
+$_SESSION['estabelecimento_atual'] = $estabelecimento_id;
 
-$_SESSION['codigo_atual'] = $codigo_avaliacao; 
-
-// Define quantos colaboradores vinculados serão exibidos por página
-$por_pagina = 3; // Ajuste conforme necessário
-$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1; // Obtém o número da página atual ou define como 1
-$offset = ($pagina - 1) * $por_pagina; // Calcula o deslocamento para a consulta
-
-// Verifica se houve uma inserção de um novo colaborador
+// Insere um novo colaborador
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['colaborador_id'])) {
         $colaborador_id = filter_input(INPUT_POST, 'colaborador_id', FILTER_SANITIZE_NUMBER_INT);
         
-        // Verifica se o ID do colaborador é válido
         if ($colaborador_id) {
-            // Obtém detalhes do colaborador a partir da tabela colaboradores
+            // Obtém os detalhes do colaborador
             $col_query = "SELECT nome, tel_movel, email FROM colaboradores WHERE id = $colaborador_id";
             $col_result = mysqli_query($conn1, $col_query);
             
-            if ($colaborador = mysqli_fetch_assoc($col_result)) { // Verifica se retornou algum resultado
-                // Verifica se o colaborador já está vinculado
+            if ($colaborador = mysqli_fetch_assoc($col_result)) {
+                // Verifica se o colaborador já está vinculado a essa avaliação e estabelecimento
                 $is_vinculado = false;
-                foreach ($_SESSION['vinculados'] as $vinculado) {
+                foreach ($_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id] as $vinculado) {
                     if ($vinculado['id'] == $colaborador_id) {
-                        $is_vinculado = true; // O colaborador já está vinculado
+                        $is_vinculado = true;
                         break;
                     }
                 }
 
-                if (!$is_vinculado) { // Se não está vinculado
-                    // Insere os dados do colaborador na tabela de vinculação
+                if (!$is_vinculado) {
+                    // Insere os dados na tabela de vinculação e na sessão
                     $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) 
                                      VALUES ('$codigo_avaliacao', '$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}')";
-                    mysqli_query($conn, $insert_query); // Executa a inserção
-                
-                    // Adiciona à lista de colaboradores vinculados na sessão
-                    $_SESSION['vinculados'][] = [
+                    mysqli_query($conn, $insert_query);
+
+                    // Adiciona o colaborador à lista de vinculados na sessão
+                    $_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id][] = [
                         'id' => $colaborador_id,
                         'nome' => $colaborador['nome'],
                         'tel_movel' => $colaborador['tel_movel'],
                         'email' => $colaborador['email']
                     ];
                 } else {
-                    // Se o colaborador já está vinculado, mostra uma mensagem de erro
                     echo "<script>alert('Colaborador já está vinculado.');</script>";
                 }
             } else {
-                // Se não encontrou o colaborador, mostra uma mensagem de erro
                 echo "<script>alert('Colaborador não encontrado.');</script>";
             }
         } else {
-            // Se o ID não é válido, mostra uma mensagem de erro
             echo "<script>alert('Selecione um colaborador válido.');</script>";
         }
     }
 
-    // Verifica se houve uma exclusão de um colaborador
+    // Remover colaborador
     if (isset($_POST['excluir_id'])) {
         $excluir_id = filter_input(INPUT_POST, 'excluir_id', FILTER_SANITIZE_NUMBER_INT);
 
-        // Remove o colaborador da tabela 'avaliacao_estabelecimento_colaborador'
+        // Remove da tabela e da sessão
         $delete_query = "DELETE FROM avaliacao_estabelecimento_colaborador WHERE colaborador_id = $excluir_id AND avaliacao_estabelecimento_id = $codigo_avaliacao";
-        mysqli_query($conn, $delete_query); // Executa a exclusão
+        mysqli_query($conn, $delete_query);
 
-        // Remove o colaborador da lista de vinculados na sessão
-        foreach ($_SESSION['vinculados'] as $key => $vinculado) {
+        // Remove da sessão também
+        foreach ($_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id] as $key => $vinculado) {
             if ($vinculado['id'] == $excluir_id) {
-                unset($_SESSION['vinculados'][$key]); // Remove da sessão
+                unset($_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id][$key]);
                 break;
             }
         }
     }
 }
 
-// Armazena os colaboradores vinculados na variável
-$vinculados = isset($_SESSION['vinculados']) ? $_SESSION['vinculados'] : []; // Verifica se 'vinculados' está definido na sessão
+// Armazena os colaboradores vinculados
+$vinculados = $_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id] ?? [];
 
-// Paginação dos colaboradores vinculados
-$total_vinculados = count($vinculados); // Total de colaboradores vinculados
-$total_paginas = ceil($total_vinculados / $por_pagina); // Calcula o total de páginas
-$vinculados_pagina = array_slice($vinculados, $offset, $por_pagina); // Obtém os colaboradores da página atual
+// Paginação
+$total_vinculados = count($vinculados);
+$por_pagina = 3;
+$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($pagina - 1) * $por_pagina;
+$total_paginas = ceil($total_vinculados / $por_pagina);
+$vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
