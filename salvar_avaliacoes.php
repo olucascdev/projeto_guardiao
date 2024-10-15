@@ -57,19 +57,27 @@ if (empty($codigo_avaliacao)) {
         // Insere os colaboradores vinculados novamente
         if (isset($_SESSION['vinculados']) && !empty($_SESSION['vinculados'])) {
             foreach ($_SESSION['vinculados'] as $vinculado) {
-                $colaborador_id = $vinculado['id'];
-                $tel_movel = $vinculado['tel_movel'];
-                $email = $vinculado['email'];
-
-                // Inserir na tabela avaliacao_estabelecimento_colaborador
-                $insert_colaborador = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) VALUES ('$codigo_avaliacao', '$colaborador_id', '$tel_movel', '$email')";
-                if (!mysqli_query($conn, $insert_colaborador)) {
-                    echo "Erro ao vincular colaborador: " . mysqli_error($conn);
+                // Verifica se as chaves 'id', 'tel_movel' e 'email' existem antes de acessá-las
+                if (isset($vinculado['id'], $vinculado['tel_movel'], $vinculado['email'])) {
+                    $colaborador_id = $vinculado['id'];
+                    $tel_movel = $vinculado['tel_movel'];
+                    $email = $vinculado['email'];
+        
+                    // Inserir na tabela avaliacao_estabelecimento_colaborador
+                    $insert_colaborador = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) 
+                                           VALUES ('$codigo_avaliacao', '$colaborador_id', '$tel_movel', '$email')";
+                    if (!mysqli_query($conn, $insert_colaborador)) {
+                        echo "Erro ao vincular colaborador: " . mysqli_error($conn);
+                    }
+                } else {
+                    // Exibe um aviso se houver alguma entrada incompleta
+                    echo "Dados incompletos para colaborador vinculado.";
                 }
             }
         } else {
             echo "Nenhum colaborador vinculado para inserir.";
         }
+        
 
         echo "Avaliação atualizada com sucesso!";
         header("Location: avaliacoesHome.php?estabelecimento_id=$estabelecimento_id");
