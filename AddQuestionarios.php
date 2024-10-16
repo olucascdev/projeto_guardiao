@@ -55,13 +55,14 @@ if (!empty($codigo_pergunta)) {
         <div class="mb-3">
             <label class="form-label">Tipo da Pergunta</label>
             <div>
-                <input type="radio" id="discursiva" name="tipo_pergunta" value="discursiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'discursiva') ? 'checked' : ''; ?> required>
+                <input type="radio" id="Discursiva" name="tipo_pergunta" value="Discursiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'Discursiva') ? 'checked' : ''; ?> required>
                 <label for="discursiva">Discursiva</label>
             </div>
             <div>
-                <input type="radio" id="objetiva" name="tipo_pergunta" value="objetiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'objetiva') ? 'checked' : ''; ?> required>
-                <label for="objetiva">Objetiva</label>
+                <input type="radio" id="Objetiva" name="tipo_pergunta" value="Objetiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'Objetiva') ? 'checked' : ''; ?> required>
+                <label for="Objetiva">Objetiva</label>
             </div>
+                                                                                                                                 
         </div>
 
         <button type="submit" class="btn btn-primary">Salvar</button>
@@ -139,7 +140,7 @@ if (!empty($codigo_pergunta)) {
     function toggleTipoPergunta() {
         var tipoPergunta = document.querySelector('input[name="tipo_pergunta"]:checked').value;
 
-        if (tipoPergunta === "objetiva") {
+        if (tipoPergunta === "Objetiva") {
             // Exibe o modal para perguntas objetivas
             var modalObjetiva = new bootstrap.Modal(document.getElementById("modalObjetiva"));
             modalObjetiva.show();

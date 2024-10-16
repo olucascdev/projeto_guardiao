@@ -12,6 +12,9 @@ $tipo_pergunta = filter_input(INPUT_POST, 'tipo_pergunta', FILTER_SANITIZE_SPECI
 // Inicializa as variáveis de resposta
 $respostas = filter_input(INPUT_POST, 'objetiva_opcao', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY) ?? [];
 
+// Garante que o array de respostas tenha pelo menos 5 elementos
+$respostas = array_pad($respostas, 5, ''); // Preenche com strings vazias até ter 5 elementos
+
 // Verifica se está editando ou criando uma nova pergunta
 if (!empty($codigo_pergunta)) {
     // Atualizar pergunta existente
