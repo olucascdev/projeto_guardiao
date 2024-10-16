@@ -29,7 +29,7 @@ if (!empty($codigo_pergunta)) {
 }
 
 // Configurações de paginação
-$perguntasPorPagina = 3; // Defina quantos itens por página
+$perguntasPorPagina = 15; // Defina quantos itens por página
 $paginaAtual = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1; // Página atual
 $offset = ($paginaAtual - 1) * $perguntasPorPagina;
 
