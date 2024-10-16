@@ -28,23 +28,7 @@ if (!empty($codigo_pergunta)) {
     }
 }
 
-// Configurações de paginação
-$perguntasPorPagina = 15; // Defina quantos itens por página
-$paginaAtual = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1; // Página atual
-$offset = ($paginaAtual - 1) * $perguntasPorPagina;
 
-// Consulta para contar o número total de perguntas
-$totalQuery = "SELECT COUNT(*) AS total FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao'";
-$totalResult = mysqli_query($conn, $totalQuery);
-$totalRow = mysqli_fetch_assoc($totalResult);
-$totalPerguntas = $totalRow['total'];
-
-// Calcula o número total de páginas
-$totalPaginas = ceil($totalPerguntas / $perguntasPorPagina);
-
-// Consulta com limite para paginação
-$query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao' LIMIT $offset, $perguntasPorPagina";
-$rows = mysqli_query($conn, $query);
 
 ?>
 
@@ -124,7 +108,6 @@ $rows = mysqli_query($conn, $query);
     </div>
 </div>
 
-<!-- Aqui a parte de exibição da tabela -->
 <table class="table table-sm table-light table-bordered table-striped table-hover mt-3" border="1" cellspacing=0 cellpadding=5 id="perguntasTable">
     <thead>
         <tr>
@@ -134,7 +117,11 @@ $rows = mysqli_query($conn, $query);
         </tr>
     </thead>
     <tbody>
-        <?php while ($row = mysqli_fetch_assoc($rows)): ?>
+        <?php 
+        $query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao'";
+        $rows = mysqli_query($conn, $query);
+
+        while ($row = mysqli_fetch_assoc($rows)): ?>
             <tr data-id="<?php echo $row['id']; ?>">
                 <td><?php echo $row['questao']; ?></td>
                 <td><?php echo $row['questao_tipo']; ?></td>
@@ -150,27 +137,6 @@ $rows = mysqli_query($conn, $query);
         <?php endwhile; ?>
     </tbody>
 </table>
-
-<!-- Navegação de paginação -->
-<nav aria-label="Navegação de página">
-    <ul class="pagination justify-content-center">
-        <?php if ($paginaAtual > 1): ?>
-            <li class="page-item">
-                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $paginaAtual - 1; ?>">Anterior</a>
-            </li>
-        <?php endif; ?>
-        <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
-            <li class="page-item <?php echo ($i == $paginaAtual) ? 'active' : ''; ?>">
-                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
-            </li>
-        <?php endfor; ?>
-        <?php if ($paginaAtual < $totalPaginas): ?>
-            <li class="page-item">
-                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $paginaAtual + 1; ?>">Próxima</a>
-            </li>
-        <?php endif; ?>
-    </ul>
-</nav>
 
 
 
@@ -248,4 +214,4 @@ $rows = mysqli_query($conn, $query);
 </script>
 
 </body>
-</html>
+</html> 
