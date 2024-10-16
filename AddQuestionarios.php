@@ -65,7 +65,7 @@ if (!empty($codigo_pergunta)) {
                                                                                                                                  
         </div>
 
-        <button type="submit" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-success">Salvar</button>
     </form>
 </div>
 
@@ -126,7 +126,10 @@ if (!empty($codigo_pergunta)) {
                     <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>">
                         <i class="bi bi-pencil"></i>
                     </a>
-                    <!-- Adicione aqui o botão para deletar a pergunta, se necessário -->
+                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>">
+                        <i class="bi bi-trash-fill me-2"></i> <!-- Ícone de excluir -->
+                    </a>
+
                 </td>
             </tr>
         <?php endwhile; ?>
