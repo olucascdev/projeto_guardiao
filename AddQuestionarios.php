@@ -27,6 +27,25 @@ if (!empty($codigo_pergunta)) {
         $respostas = [$row['resposta1'], $row['resposta2'], $row['resposta3'], $row['resposta4'], $row['resposta5']];
     }
 }
+
+// Configurações de paginação
+$perguntasPorPagina = 3; // Defina quantos itens por página
+$paginaAtual = isset($_GET['pagina']) ? intval($_GET['pagina']) : 1; // Página atual
+$offset = ($paginaAtual - 1) * $perguntasPorPagina;
+
+// Consulta para contar o número total de perguntas
+$totalQuery = "SELECT COUNT(*) AS total FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao'";
+$totalResult = mysqli_query($conn, $totalQuery);
+$totalRow = mysqli_fetch_assoc($totalResult);
+$totalPerguntas = $totalRow['total'];
+
+// Calcula o número total de páginas
+$totalPaginas = ceil($totalPerguntas / $perguntasPorPagina);
+
+// Consulta com limite para paginação
+$query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao' LIMIT $offset, $perguntasPorPagina";
+$rows = mysqli_query($conn, $query);
+
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +56,7 @@ if (!empty($codigo_pergunta)) {
     <title>Cadastro de Pergunta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body class="p-4">
 
@@ -62,7 +82,6 @@ if (!empty($codigo_pergunta)) {
                 <input type="radio" id="Objetiva" name="tipo_pergunta" value="Objetiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'Objetiva') ? 'checked' : ''; ?> required>
                 <label for="Objetiva">Objetiva</label>
             </div>
-                                                                                                                                 
         </div>
 
         <button type="submit" class="btn btn-success">Salvar</button>
@@ -105,7 +124,8 @@ if (!empty($codigo_pergunta)) {
     </div>
 </div>
 
-<table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing=0 cellpadding=10>
+<!-- Aqui a parte de exibição da tabela -->
+<table class="table table-sm table-light table-bordered table-striped table-hover mt-3" border="1" cellspacing=0 cellpadding=5 id="perguntasTable">
     <thead>
         <tr>
             <th>Pergunta</th>
@@ -114,12 +134,8 @@ if (!empty($codigo_pergunta)) {
         </tr>
     </thead>
     <tbody>
-        <?php 
-        $query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao'";
-        $rows = mysqli_query($conn, $query);
-
-        while ($row = mysqli_fetch_assoc($rows)): ?>
-            <tr>
+        <?php while ($row = mysqli_fetch_assoc($rows)): ?>
+            <tr data-id="<?php echo $row['id']; ?>">
                 <td><?php echo $row['questao']; ?></td>
                 <td><?php echo $row['questao_tipo']; ?></td>
                 <td class="text-center d-flex justify-content-center">
@@ -129,12 +145,34 @@ if (!empty($codigo_pergunta)) {
                     <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>">
                         <i class="bi bi-trash-fill me-2"></i> <!-- Ícone de excluir -->
                     </a>
-
                 </td>
             </tr>
         <?php endwhile; ?>
     </tbody>
 </table>
+
+<!-- Navegação de paginação -->
+<nav aria-label="Navegação de página">
+    <ul class="pagination justify-content-center">
+        <?php if ($paginaAtual > 1): ?>
+            <li class="page-item">
+                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $paginaAtual - 1; ?>">Anterior</a>
+            </li>
+        <?php endif; ?>
+        <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+            <li class="page-item <?php echo ($i == $paginaAtual) ? 'active' : ''; ?>">
+                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
+        <?php if ($paginaAtual < $totalPaginas): ?>
+            <li class="page-item">
+                <a class="page-link" href="?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&pagina=<?php echo $paginaAtual + 1; ?>">Próxima</a>
+            </li>
+        <?php endif; ?>
+    </ul>
+</nav>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -180,6 +218,33 @@ if (!empty($codigo_pergunta)) {
             document.querySelector('form').appendChild(inputOpcao);
         }
     }
+
+    // Inicializa a funcionalidade de arrastar e soltar
+    var sortable = Sortable.create(document.getElementById('perguntasTable').querySelector('tbody'), {
+    animation: 150,
+    onEnd: function (evt) {
+        var ids = Array.from(evt.from.children).map(row => row.getAttribute('data-id'));
+        console.log('Nova ordem: ', ids);
+
+        // Envia a nova ordem para o servidor via AJAX
+        fetch('salvar_ordem.php', {
+            method: 'POST',
+            body: JSON.stringify({ ordem: ids, codigo_avaliacao: '<?php echo $codigo_avaliacao; ?>' }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                
+            } else {
+                alert('Erro ao salvar a ordem.');
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    }
+});
 </script>
 
 </body>
