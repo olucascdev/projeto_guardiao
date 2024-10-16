@@ -2,103 +2,17 @@
 session_start(); // Inicia a sessão para manter as informações do usuário
 include_once 'Controller/conexao.php'; // Inclui o arquivo de conexão com o banco de dados
 
-// Captura o ID do estabelecimento da URL e o sanitiza
-$estabelecimento_id = filter_input(INPUT_GET, 'estabelecimento_id', FILTER_SANITIZE_NUMBER_INT);
-
-// Recebe os dados do formulário via GEsT (valores passados pela URL), sanitizando as entradas
-if (isset($_GET['codigo_avaliacao'])) {
-    $codigo_avaliacao = $_GET['codigo_avaliacao']; // Captura o valor de 'codigo'
-}
-$nome_avaliacao = filter_input(INPUT_GET, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
-$data_cadastro = filter_input(INPUT_GET, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
-$observacoes = filter_input(INPUT_GET, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
-
-// Recupera a abreviação do estabelecimento para exibição na página
-$query_abreviacao = "SELECT abrev FROM estabelecimentos WHERE id = '$estabelecimento_id'";
-$result_abreviacao = mysqli_query($conn, $query_abreviacao);
-$abreviacao_row = mysqli_fetch_assoc($result_abreviacao);
-$abreviacao = $abreviacao_row['abrev'] ?? ''; // Valor padrão se não houver abreviação
-
-// Configuração de paginação
-$itens_por_pagina = 5; // Define quantos itens serão exibidos por página
-$pagina_atual = $_GET['pagina'] ?? 1; // Captura o número da página atual ou define como 1
-
-// Se houver uma pesquisa, realiza uma consulta diferente
-if(!empty($_GET['search'])) {
-    $data = $_GET['search']; // Captura a string de pesquisa
-    // Total de itens para a pesquisa
-    $total_query = "SELECT COUNT(*) as total FROM avaliacao WHERE id LIKE '%$data%' OR nome_avaliacao LIKE '%$data%'";
-    $total_result = mysqli_query($conn, $total_query);
-    $total_row = mysqli_fetch_assoc($total_result);
-    $total_itens = $total_row['total']; // Total de itens que correspondem à pesquisa
-    
-    // Filtra os dados para a página atual
-    $inicio = ($pagina_atual - 1) * $itens_por_pagina; // Calcula o índice inicial para a consulta
-    $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE id LIKE '%$data%' OR nome_avaliacao LIKE '%$data%' ORDER BY id ASC LIMIT $inicio, $itens_por_pagina");
-} else {
-    // Total de itens para o estabelecimento
-    $total_query = "SELECT COUNT(*) as total FROM avaliacao WHERE estabelecimento_id = '$estabelecimento_id'";
-    $total_result = mysqli_query($conn, $total_query);
-    $total_row = mysqli_fetch_assoc($total_result);
-    $total_itens = $total_row['total']; // Total de avaliações do estabelecimento
-
-    // Filtra os dados para o estabelecimento
-    $inicio = ($pagina_atual - 1) * $itens_por_pagina; // Calcula o índice inicial
-    $rows = mysqli_query($conn, "SELECT * FROM avaliacao WHERE estabelecimento_id = '$estabelecimento_id' ORDER BY id ASC LIMIT $inicio, $itens_por_pagina");
-}
-
-// Calcula o total de páginas com base no total de itens
-$total_paginas = ceil($total_itens / $itens_por_pagina); // Arredonda para cima
-
-// Recupera todas as avaliações para o dropdown
-$query_avaliacoes = "SELECT id, nome_avaliacao FROM avaliacao WHERE estabelecimento_id = '$estabelecimento_id'";
-$result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Avaliações</title>
+    <title>Cadastro de Pergunta</title>
     <!-- Inclusão do Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"> <!-- Ícones do Bootstrap -->
-    <link rel="stylesheet" href="styles/Users.css"> <!-- Estilos personalizados -->
-</head>
-<body>
-
-<!-- Seção de lista de avaliações cadastrados -->
-<div class="container2">
-    <div class="row">
-        <div class="col m-5">
-            <h2>Adicionar Perguntas - <?php echo !empty($abreviacao) ? $abreviacao : ''; ?></h2> <!-- Exibe a abreviação do estabelecimento -->
-        </div>
-    </div>
-    <div>
-    <form action="" method="post">
-        <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> <!-- Campo oculto para código -->
-        <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>"> <!-- Campo oculto para ID do estabelecimento -->
-
-        <style>
-        .opcoes-objetiva {
-            display: none;
-        }
-    </style>
-    <script>
-        function toggleTipoPergunta() {
-            // Seleciona a div das opções de pergunta objetiva
-            var tipoPergunta = document.querySelector('input[name="tipo_pergunta"]:checked').value;
-            var opcoesObjetiva = document.getElementById("opcoes-objetiva");
-
-            // Exibe as opções se a pergunta for objetiva, oculta se for discursiva
-            if (tipoPergunta === "objetiva") {
-                opcoesObjetiva.style.display = "block";
-            } else {
-                opcoesObjetiva.style.display = "none";
-            }
-        }
-    </script>
 </head>
 <body class="p-4">
 
@@ -124,117 +38,99 @@ $result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
                 </div>
             </div>
 
-            <!-- Opções para pergunta objetiva (aparecerá apenas se a pergunta for objetiva) -->
-            <div id="opcoes-objetiva" class="opcoes-objetiva">
-                <h5>Cadastre até 5 opções</h5>
-
-                <div class="mb-3">
-                    <label for="opcao1" class="form-label">Opção 1</label>
-                    <input type="text" class="form-control" id="opcao1" name="opcao1">
-                </div>
-
-                <div class="mb-3">
-                    <label for="opcao2" class="form-label">Opção 2</label>
-                    <input type="text" class="form-control" id="opcao2" name="opcao2">
-                </div>
-
-                <div class="mb-3">
-                    <label for="opcao3" class="form-label">Opção 3</label>
-                    <input type="text" class="form-control" id="opcao3" name="opcao3">
-                </div>
-
-                <div class="mb-3">
-                    <label for="opcao4" class="form-label">Opção 4</label>
-                    <input type="text" class="form-control" id="opcao4" name="opcao4">
-                </div>
-
-                <div class="mb-3">
-                    <label for="opcao5" class="form-label">Opção 5</label>
-                    <input type="text" class="form-control" id="opcao5" name="opcao5">
-                </div>
-            </div>
-
             <!-- Botão de salvar -->
             <button type="submit" class="btn btn-primary">Salvar</button>
         </form>
     </div>
 
+    <!-- Modal para preenchimento de opções de respostas para Objetiva -->
+    <div class="modal fade" id="modalObjetiva" tabindex="-1" aria-labelledby="modalObjetivaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalObjetivaLabel">Selecione a quantidade de opções</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- Seleção da quantidade de opções -->
+                    <div class="mb-3">
+                        <label for="quantidade_opcoes" class="form-label">Quantidade de Opções (1-5)</label>
+                        <select id="quantidade_opcoes" class="form-select" onchange="mostrarOpcoes()">
+                            <option value="0">Selecione a quantidade</option>
+                            <option value="2">2 Opções</option>
+                            <option value="3">3 Opções</option>
+                            <option value="4">4 Opções</option>
+                            <option value="5">5 Opções</option>
+                        </select>
+                    </div>
+
+                    <!-- Campos de texto para as opções -->
+                    <div id="opcoes_container">
+                        <div class="mb-3 opcao" id="opcao1" style="display:none;">
+                            <label for="objetiva_opcao1" class="form-label">Opção 1</label>
+                            <input type="text" class="form-control" id="objetiva_opcao1" name="objetiva_opcao1">
+                        </div>
+
+                        <div class="mb-3 opcao" id="opcao2" style="display:none;">
+                            <label for="objetiva_opcao2" class="form-label">Opção 2</label>
+                            <input type="text" class="form-control" id="objetiva_opcao2" name="objetiva_opcao2">
+                        </div>
+
+                        <div class="mb-3 opcao" id="opcao3" style="display:none;">
+                            <label for="objetiva_opcao3" class="form-label">Opção 3</label>
+                            <input type="text" class="form-control" id="objetiva_opcao3" name="objetiva_opcao3">
+                        </div>
+
+                        <div class="mb-3 opcao" id="opcao4" style="display:none;">
+                            <label for="objetiva_opcao4" class="form-label">Opção 4</label>
+                            <input type="text" class="form-control" id="objetiva_opcao4" name="objetiva_opcao4">
+                        </div>
+
+                        <div class="mb-3 opcao" id="opcao5" style="display:none;">
+                            <label for="objetiva_opcao5" class="form-label">Opção 5</label>
+                            <input type="text" class="form-control" id="objetiva_opcao5" name="objetiva_opcao5">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salvar opções</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-
-
-    <!-- Seção de Pesquisa -->
-    <div class="box-search w-auto">
-        <a href="avaliacao_estabelecimento.php" class="btn btn-primary">
-            <i class="bi bi-arrow-left"></i> Voltar <!-- Botão para voltar à página anterior -->
-        </a>
-        <input type="search" class="form-control w-50" placeholder="Pesquisar por Cód / Nome" id="pesquisar"> <!-- Campo de pesquisa -->
-        <button class="btn btn-primary" onclick="searchData()"><i class="bi bi-search"></i></button> <!-- Botão de pesquisa -->
-
-        <!-- Dropdown para escolher a avaliação -->
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     
-    </div>
+    <script>
+        // Função para alternar entre Discursiva e Objetiva
+        function toggleTipoPergunta() {
+            var tipoPergunta = document.querySelector('input[name="tipo_pergunta"]:checked').value;
 
-    <!-- Tabela para exibir avaliações cadastradas -->
-    <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
-        <thead>
-            <tr>
-                <th>Pergunta</th>
-                <th>Tipo</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach($rows as $row) : ?> <!-- Loop para exibir cada avaliação -->
-            <tr>
-                <td><?php echo $row['id']; ?></td> <!-- Exibe o ID da avaliação -->
-                <td><?php echo $row['nome_avaliacao']; ?></td> <!-- Exibe o nome da avaliação -->
-                <td><?php echo date('d/m/Y', strtotime($row['data_cadastro'])); ?></td> <!-- Exibe a data da avaliação formatada -->
-                <td><?php echo $row['descricao_avaliacao']; ?></td> <!-- Exibe a descrição da avaliação -->
-                <td class="text-center d-flex justify-content-center">
-                    <!-- Botão de Editar -->
-                    <a href="editar_avaliacoes.php?codigo_avaliacao=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
-                        <i class="bi bi-pencil-square me-2"></i> <!-- Ícone de editar -->
-                    </a>
-                    <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
-                        <i class="bi bi-trash-fill me-2"></i> <!-- Ícone de excluir -->
-                    </a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+            if (tipoPergunta === "objetiva") {
+                // Exibe o modal para perguntas objetivas
+                var modalObjetiva = new bootstrap.Modal(document.getElementById("modalObjetiva"));
+                modalObjetiva.show();
+            }
+        }
 
-    <!-- Navegação da página -->
-    <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
-            <li class="page-item <?php if($pagina_atual == 1) echo 'disabled'; ?>"> <!-- Desabilita o botão "Anterior" se estiver na primeira página -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF']; ?>?pagina=<?php echo $pagina_atual - 1; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">Anterior</a>
-            </li>
-            <?php for($i = 1; $i <= $total_paginas; $i++) : ?> <!-- Loop para gerar os números das páginas -->
-            <li class="page-item <?php if($pagina_atual == $i) echo 'active'; ?>"> <!-- Marca a página atual como ativa -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF']; ?>?pagina=<?php echo $i; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>"><?php echo $i; ?></a>
-            </li>
-            <?php endfor; ?>
-            <li class="page-item <?php if($pagina_atual == $total_paginas) echo 'disabled'; ?>"> <!-- Desabilita o botão "Próximo" se estiver na última página -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF']; ?>?pagina=<?php echo $pagina_atual + 1; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">Próximo</a>
-            </li>
-        </ul>
-    </nav>             
-</div>
+        // Função para mostrar as opções conforme a quantidade selecionada
+        function mostrarOpcoes() {
+            var quantidade = document.getElementById('quantidade_opcoes').value;
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Inclusão do Bootstrap JS -->
-<script>
-    // Função para atualizar a página
-    function atualizarPagina() {
-        window.location.reload(); // Recarrega a página atual
-    }
+            // Oculta todas as opções inicialmente
+            var opcoes = document.getElementsByClassName('opcao');
+            for (var i = 0; i < opcoes.length; i++) {
+                opcoes[i].style.display = 'none';
+            }
 
-    // Função para realizar a pesquisa
-    function searchData() {
-        var search = document.getElementById('pesquisar').value; // Captura o valor do campo de pesquisa
-        window.location.href = "avaliacao_estabelecimento.php?search=" + search + "&estabelecimento_id=<?php echo $estabelecimento_id; ?>"; // Redireciona com o valor da pesquisa
-    }
-</script>
+            // Mostra as opções de acordo com a quantidade selecionada
+            for (var i = 1; i <= quantidade; i++) {
+                document.getElementById('opcao' + i).style.display = 'block';
+            }
+        }
+    </script>
+
 </body>
 </html>
