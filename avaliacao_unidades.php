@@ -102,7 +102,7 @@
                             
                                 <a href="excluir_estabelecimento.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
                             </a>
-                            <a href="avaliacoesHome.php"><i class="bi bi-box-arrow-in-right"></i></a>
+                            
                             </td>
                            
                         </tr>

@@ -15,6 +15,15 @@ $respostas = filter_input(INPUT_POST, 'objetiva_opcao', FILTER_SANITIZE_SPECIAL_
 // Garante que o array de respostas tenha pelo menos 5 elementos
 $respostas = array_pad($respostas, 5, ''); // Preenche com strings vazias até ter 5 elementos
 
+// Verifica se todos os campos essenciais estão recebendo valores
+if (!$codigo_avaliacao) {
+    die('Erro: Código da avaliação não foi fornecido.');
+}
+
+if (!$nome_pergunta) {
+    die('Erro: O nome da pergunta não foi fornecido.');
+}
+
 // Verifica se está editando ou criando uma nova pergunta
 if (!empty($codigo_pergunta)) {
     // Atualizar pergunta existente
@@ -39,7 +48,7 @@ if (mysqli_query($conn, $query)) {
     header("Location: AddQuestionarios.php?codigo_avaliacao=$codigo_avaliacao");
     exit();
 } else {
-    echo "Erro: " . mysqli_error($conn);
+    echo "Erro ao executar a consulta: " . mysqli_error($conn);
 }
 
 // Fecha a conexão

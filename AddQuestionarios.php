@@ -1,6 +1,6 @@
 <?php 
-session_start(); // Inicia a sessão para manter as informações do usuário
-include_once 'Controller/conexao.php'; // Inclui o arquivo de conexão com o banco de dados
+session_start(); 
+include_once 'Controller/conexao.php'; 
 
 // Variáveis para armazenar os dados da avaliação e da pergunta
 $codigo_avaliacao = $_GET['codigo_avaliacao'] ?? null;
@@ -17,18 +17,31 @@ $respostas = [];
 
 // Verifica se estamos editando uma pergunta
 if (!empty($codigo_pergunta)) {
-    $query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE id = '$codigo_pergunta'";
-    $result = mysqli_query($conn, $query);
+    $stmt = $conn->prepare("SELECT * FROM avaliacao_estabelecimento_questoes WHERE id = ?");
+    $stmt->bind_param("i", $codigo_pergunta);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($result && mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_assoc($result);
+    if ($result && $result->num_rows > 0) {
+        $row = $result->fetch_assoc();
         $nome_pergunta = $row['questao'];
         $tipo_pergunta = $row['questao_tipo'];
         $respostas = [$row['resposta1'], $row['resposta2'], $row['resposta3'], $row['resposta4'], $row['resposta5']];
     }
 }
+$query_estabelecimento = "SELECT abrev FROM estabelecimentos WHERE id = ?";
+$stmt = $conn->prepare($query_estabelecimento); // Prepara a consulta
+$stmt->bind_param("i", $estabelecimento_id); // Faz o binding do parâmetro
+$stmt->execute(); // Executa a consulta
+$result_estabelecimento = $stmt->get_result(); // Obtém o resultado
 
-
+// Verifica se o estabelecimento foi encontrado e captura a abreviação
+if ($result_estabelecimento->num_rows > 0) {
+    $unidade = $result_estabelecimento->fetch_assoc(); // Obtém os dados da unidade
+    $abrev = $unidade['abrev'] ?? ''; // Atribui a abreviação, se encontrada
+} else {
+    $abrev = ''; // Valor padrão se não encontrado
+}
 
 ?>
 
@@ -40,30 +53,36 @@ if (!empty($codigo_pergunta)) {
     <title>Cadastro de Pergunta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="style/colaborador.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body class="p-4">
 
 <div class="container">
-    <h2>Cadastro de Pergunta</h2>
+<div class="botao">
+            <!-- Botão "Voltar" com os parâmetros de avaliação e estabelecimento na URL -->
+            <a href="editar_avaliacoes.php?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>" class="btn btn-primary">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+    <h2>Cadastro de Pergunta <?php echo "- " . htmlspecialchars($nome_avaliacao, ENT_QUOTES) . " - " . htmlspecialchars($abrev, ENT_QUOTES); ?></h2>
     <form action="salvar_pergunta.php" method="POST">
         <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> 
         <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
-        <input type="hidden" name="codigo_pergunta" value="<?php echo $codigo_pergunta; ?>"> <!-- Campo oculto para o código da pergunta -->
+        <input type="hidden" name="codigo_pergunta" value="<?php echo $codigo_pergunta; ?>"> 
 
         <div class="mb-3">
             <label for="nome_pergunta" class="form-label">Pergunta</label>
-            <input type="text" class="form-control" id="nome_pergunta" name="nome_pergunta" value="<?php echo $nome_pergunta; ?>" required>
+            <input type="text" class="form-control" id="nome_pergunta" name="nome_pergunta" value="<?php echo htmlspecialchars($nome_pergunta); ?>" required>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Tipo da Pergunta</label>
             <div>
-                <input type="radio" id="Discursiva" name="tipo_pergunta" value="Discursiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'Discursiva') ? 'checked' : ''; ?> required>
-                <label for="discursiva">Discursiva</label>
+                <input type="radio" id="Discursiva" name="tipo_pergunta" value="1" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta == '1') ? 'checked' : ''; ?> required>
+                <label for="Discursiva">Discursiva</label>
             </div>
             <div>
-                <input type="radio" id="Objetiva" name="tipo_pergunta" value="Objetiva" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta === 'Objetiva') ? 'checked' : ''; ?> required>
+                <input type="radio" id="Objetiva" name="tipo_pergunta" value="2" onclick="toggleTipoPergunta()" <?php echo ($tipo_pergunta == '2') ? 'checked' : ''; ?> required>
                 <label for="Objetiva">Objetiva</label>
             </div>
         </div>
@@ -118,19 +137,21 @@ if (!empty($codigo_pergunta)) {
     </thead>
     <tbody>
         <?php 
-        $query = "SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = '$codigo_avaliacao'";
-        $rows = mysqli_query($conn, $query);
+        $stmt = $conn->prepare("SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = ?");
+        $stmt->bind_param("i", $codigo_avaliacao);
+        $stmt->execute();
+        $rows = $stmt->get_result();
 
-        while ($row = mysqli_fetch_assoc($rows)): ?>
+        while ($row = $rows->fetch_assoc()): ?>
             <tr data-id="<?php echo $row['id']; ?>">
-                <td><?php echo $row['questao']; ?></td>
-                <td><?php echo $row['questao_tipo']; ?></td>
+                <td><?php echo htmlspecialchars($row['questao']); ?></td>
+                <td><?php echo $row['questao_tipo'] == '1' ? 'Discursiva' : 'Objetiva'; ?></td>
                 <td class="text-center d-flex justify-content-center">
                     <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>">
                         <i class="bi bi-pencil"></i>
                     </a>
                     <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>">
-                        <i class="bi bi-trash-fill me-2"></i> <!-- Ícone de excluir -->
+                        <i class="bi bi-trash-fill me-2"></i>
                     </a>
                 </td>
             </tr>
@@ -138,80 +159,64 @@ if (!empty($codigo_pergunta)) {
     </tbody>
 </table>
 
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Função para alternar entre Discursiva e Objetiva
     function toggleTipoPergunta() {
         var tipoPergunta = document.querySelector('input[name="tipo_pergunta"]:checked').value;
 
-        if (tipoPergunta === "Objetiva") {
-            // Exibe o modal para perguntas objetivas
+        if (tipoPergunta === "2") {
             var modalObjetiva = new bootstrap.Modal(document.getElementById("modalObjetiva"));
             modalObjetiva.show();
         }
     }
 
-    // Função para mostrar as opções conforme a quantidade selecionada
     function mostrarOpcoes() {
         var quantidade = document.getElementById('quantidade_opcoes').value;
-
-        // Oculta todas as opções inicialmente
         var opcoes = document.getElementsByClassName('opcao');
         for (var i = 0; i < opcoes.length; i++) {
             opcoes[i].style.display = 'none';
         }
-
-        // Mostra as opções de acordo com a quantidade selecionada
         for (var i = 1; i <= quantidade; i++) {
             document.getElementById('opcao' + i).style.display = 'block';
         }
     }
 
-    // Função para salvar as opções no formulário principal
     function salvarOpcoes() {
         var quantidade = document.getElementById('quantidade_opcoes').value;
-
-        // Atualiza os valores das opções no formulário principal
         for (var i = 1; i <= quantidade; i++) {
             var valorOpcao = document.getElementById('objetiva_opcao' + i).value;
             var inputOpcao = document.createElement("input");
             inputOpcao.type = "hidden";
-            inputOpcao.name = "objetiva_opcao[]"; // Cria um array de respostas
+            inputOpcao.name = "objetiva_opcao[]";
             inputOpcao.value = valorOpcao;
             document.querySelector('form').appendChild(inputOpcao);
         }
     }
 
-    // Inicializa a funcionalidade de arrastar e soltar
     var sortable = Sortable.create(document.getElementById('perguntasTable').querySelector('tbody'), {
-    animation: 150,
-    onEnd: function (evt) {
-        var ids = Array.from(evt.from.children).map(row => row.getAttribute('data-id'));
-        console.log('Nova ordem: ', ids);
-
-        // Envia a nova ordem para o servidor via AJAX
-        fetch('salvar_ordem.php', {
-            method: 'POST',
-            body: JSON.stringify({ ordem: ids, codigo_avaliacao: '<?php echo $codigo_avaliacao; ?>' }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                
-            } else {
-                alert('Erro ao salvar a ordem.');
-            }
-        })
-        .catch(error => console.error('Erro:', error));
-    }
-});
+        animation: 150,
+        onEnd: function (evt) {
+            var ids = Array.from(evt.from.children).map(row => row.getAttribute('data-id'));
+            fetch('salvar_ordem.php', {
+                method: 'POST',
+                body: JSON.stringify({ ordem: ids, codigo_avaliacao: '<?php echo $codigo_avaliacao; ?>' }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Ordem salva com sucesso!');
+                } else {
+                    alert('Erro ao salvar a ordem.');
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        }  
+    });
 </script>
 
 </body>
-</html> 
+</html>

@@ -91,6 +91,20 @@ $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $offset = ($pagina - 1) * $por_pagina;
 $total_paginas = ceil($total_vinculados / $por_pagina);
 $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
+
+$query_estabelecimento = "SELECT abrev FROM estabelecimentos WHERE id = ?";
+$stmt = $conn->prepare($query_estabelecimento); // Prepara a consulta
+$stmt->bind_param("i", $estabelecimento_id); // Faz o binding do parâmetro
+$stmt->execute(); // Executa a consulta
+$result_estabelecimento = $stmt->get_result(); // Obtém o resultado
+
+// Verifica se o estabelecimento foi encontrado e captura a abreviação
+if ($result_estabelecimento->num_rows > 0) {
+    $unidade = $result_estabelecimento->fetch_assoc(); // Obtém os dados da unidade
+    $abrev = $unidade['abrev'] ?? ''; // Atribui a abreviação, se encontrada
+} else {
+    $abrev = ''; // Valor padrão se não encontrado
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -110,7 +124,7 @@ $vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
         </div>
-        <h3>Vincular Colaborador no Questionário</h3>
+        <h3>Vincular Colaborador no Questionário <?php echo "- " . htmlspecialchars($nome_avaliacao, ENT_QUOTES) . " - " . htmlspecialchars($abrev, ENT_QUOTES); ?></h3>
         <form method="POST" action=""> <!-- Formulário para adicionar colaboradores -->
             <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
                 <thead>
