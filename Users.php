@@ -120,7 +120,7 @@
 
                             <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
-                                    <a href="CadastroUsuarioEdit.php?
+                                    <a class="btn btn-warning btn-sm me-2" href="CadastroUsuarioEdit.php?
                                     &id=<?php echo $row['id']; ?>
                                     &nome=<?php echo $row['nome']; ?>
                                     &acesso=<?php echo $row['acesso']; ?>
@@ -128,11 +128,11 @@
                                     &status=<?php echo $row['ativo']; ?>
                                     
                                     ">
-                                    <i class="bi bi-pencil-square me-2"></i>
+                                    <i class="bi bi-pencil w-25"></i>
                                     </a>
                                 
                             
-                                <a href="Controller/excluir.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
+                                <a class="btn btn-danger btn-sm me-2"  href="Controller/excluir.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill w-25"></i> 
                             </a>
                             </td>
                            <!-- <td class="text-center">

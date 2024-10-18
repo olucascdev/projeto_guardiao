@@ -66,11 +66,11 @@
                 <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing = 0 cellpadding = 10>
                     <thead>
                         <tr>
-                            <th>Código</th>
+                            <th style="width: 5%;">Código</th>
                             <th>Nome do Estabelecimento</th>
                             <th>Sigla</th>
                             <th>Status</th>
-                            <th>Ações</th>
+                            <th style="width: 10%;">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,13 +94,13 @@
 
                             <td class="text-center d-flex justify-content-center">
                                     <!-- Botão de Editar -->
-                                    <a href="editar_estabelecimento.php?codigo=<?php echo $row['id']; ?>&estabelecimento=<?php echo urlencode($row['estabelecimento']); ?>&abrev=<?php echo $row['abrev']; ?>&ativo=<?php echo urlencode($row['ativo']); ?>">
-                                    <i class="bi bi-pencil-square me-2"></i>
+                                    <a class="btn btn-warning btn-sm me-2" href="editar_estabelecimento.php?codigo=<?php echo $row['id']; ?>&estabelecimento=<?php echo urlencode($row['estabelecimento']); ?>&abrev=<?php echo $row['abrev']; ?>&ativo=<?php echo urlencode($row['ativo']); ?>">
+                                    <i class="bi bi-pencil w-25"></i>
                                     </a>
 
                                 
                             
-                                <a href="excluir_estabelecimento.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill me-2"></i>
+                                <a class="btn btn-danger btn-sm me-2" href="excluir_estabelecimento.php?id=<?php echo $row['id']; ?>"><i class="bi bi-trash-fill w-25"></i>
                             </a>
                             
                             </td>

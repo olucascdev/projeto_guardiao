@@ -90,11 +90,11 @@ $result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
     <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10">
         <thead>
             <tr>
-                <th>Código</th>
+                <th style="width: 5%;">Código</th>
                 <th>Nome da Avaliação</th>
-                <th>Data da Avaliação</th>
+                <th style="width: 10%;">Data da Avaliação</th>
                 <th>Descrição</th>
-                <th>Ações</th>
+                <th style="width: 10%;">Ações</th>
             </tr>
         </thead>
         <tbody>
@@ -106,11 +106,11 @@ $result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
                 <td><?php echo $row['descricao_avaliacao']; ?></td> <!-- Exibe a descrição da avaliação -->
                 <td class="text-center d-flex justify-content-center">
                     <!-- Botão de Editar -->
-                    <a href="editar_avaliacoes.php?codigo_avaliacao=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
-                        <i class="bi bi-pencil-square me-2"></i> <!-- Ícone de editar -->
+                    <a class="btn btn-warning btn-sm me-2" href="editar_avaliacoes.php?codigo_avaliacao=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($row['nome_avaliacao']); ?>&data_cadastro=<?php echo $row['data_cadastro']; ?>&observacoes=<?php echo urlencode($row['descricao_avaliacao']); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>" >
+                        <i class="bi bi-pencil w-25"></i> <!-- Ícone de editar -->
                     </a>
-                    <a href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>">
-                        <i class="bi bi-trash-fill me-2"></i> <!-- Ícone de excluir -->
+                    <a class="btn btn-danger btn-sm me-2" href="excluir_avaliacoes.php?id=<?php echo $row['id']; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?> ">
+                        <i class="bi bi-trash-fill w-25"></i> <!-- Ícone de excluir -->
                     </a>
                 </td>
             </tr>
