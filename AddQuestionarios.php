@@ -134,8 +134,8 @@ if ($result_estabelecimento->num_rows > 0) {
     <thead>
         <tr>
             <th>Pergunta</th>
-            <th>Tipo</th>
-            <th>Ações</th>
+            <th style="width: 15%;">Tipo</th>
+            <th style="width: 15%;">Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -150,13 +150,14 @@ if ($result_estabelecimento->num_rows > 0) {
                 <td><?php echo htmlspecialchars($row['questao']); ?></td>
                 <td><?php echo $row['questao_tipo'] == '1' ? 'Discursiva' : 'Objetiva'; ?></td>
                 <td class="text-center d-flex justify-content-center">
-                    <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>">
-                        <i class="bi bi-pencil"></i>
+                    <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-warning btn-sm me-2">
+                        <i class="bi bi-pencil w-25"></i>
                     </a>
-                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>">
-                        <i class="bi bi-trash-fill me-2"></i>
+                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash-fill w-25"></i>
                     </a>
                 </td>
+
             </tr>
         <?php endwhile; ?>
     </tbody>

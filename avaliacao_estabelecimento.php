@@ -97,11 +97,12 @@ if (!empty($_GET['search'])) {
                     ?>
                 </td>
                 <td class="text-center d-flex justify-content-center">
-                    <!-- Link para escolher o estabelecimento e redirecionar para a página de avaliações -->
-                    <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $row['id']; ?>">
-                    <i class="bi bi-box-arrow-in-right"></i>
+                    <!-- Botão para escolher o estabelecimento e redirecionar para a página de avaliações -->
+                    <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $row['id']; ?>" class="btn btn-primary btn-sm w-100">
+                        <i class="bi bi-box-arrow-in-right"></i>
                     </a>
                 </td>
+
             </tr>
             <?php endforeach; ?>                              
         </tbody>
