@@ -1,0 +1,170 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa; /* Light background for contrast */
+    color: #212529; /* Default text color */
+}
+
+/* Container styling */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Button styles */
+.btn {
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Primary button styling */
+.btn-primary {
+    background-color: rgb(16, 29, 37);
+    border-color: rgb(16, 29, 37);
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #0d1a1f; /* Darker shade for hover effect */
+}
+
+/* Success button styling */
+.btn-success {
+    background-color: #28a745; /* Bootstrap's default success color */
+    border-color: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background-color: #218838; /* Darker shade for hover effect */
+}
+
+/* Warning button styling */
+.btn-warning {
+    background-color: #ffc107; /* Bootstrap's default warning color */
+    border-color: #ffc107;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800; /* Darker shade for hover effect */
+}
+
+/* Danger button styling */
+.btn-danger {
+    background-color: #dc3545; /* Bootstrap's default danger color */
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333; /* Darker shade for hover effect */
+}
+
+/* Form styles */
+.form-label {
+    font-weight: bold;
+    color: rgb(16, 29, 37);
+}
+
+/* Table styling */
+.table {
+    border-radius: 5px; /* Rounded corners */
+    overflow: hidden; /* Ensure the corners are rounded */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Minimal box shadow */
+    background-color: white; /* Optional: set a white background for contrast */
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: none; /* Remove default borders */
+    border-right: 2px solid rgba(0, 0, 0, 0.1);
+}
+.table thead th {
+    background-color: rgb(16, 29, 37); /* Use your primary color */
+    color: white; /* Change text color for contrast */
+}
+.table th:last-child {
+    border-right: none; /* Remove the border from the last header */
+}
+
+
+
+.table tr:hover {
+    background-color: #e9ecef; /* Light hover effect */
+}
+
+/* Modal header styling */
+.modal-header {
+    background-color: rgb(16, 29, 37);
+    color: white;
+}
+
+/* Pagination styles */
+.pagination .page-item .page-link {
+    color: rgb(16, 29, 37);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: rgb(16, 29, 37);
+    color: white;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #6c757d; /* Bootstrap's default disabled color */
+}
+
+.form-label {
+    font-size: 1.1rem; /* Slightly larger font size */
+    font-weight: 600; /* Bold font weight for emphasis */
+    color: rgb(16, 29, 37); /* Primary color for consistency */
+    margin-bottom: 0.5rem; /* Add some space below the label */
+    display: block; /* Ensures the label takes the full width */
+}
+
+
+/* Font size adjustments */
+h2 {
+    font-size: 2.5rem; /* Increase font size */
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1); /* Optional: Adds a bottom border to emphasize the title */
+    font-weight: bold; /* Make it bold */
+    color: rgb(16, 29, 37); /* Use your primary color */
+    margin-bottom: 20px; /* Space below the title */
+    text-align: center; /* Center the title */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .btn {
+        width: 100%; /* Full-width buttons on small screens */
+        margin-bottom: 10px;
+    }
+
+    .table {
+        font-size: 14px; /* Smaller font for tables on mobile */
+    }
+}
+/* Button styles */
+.btn {
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Primary button styling */
+.btn-primary {
+    background-color: rgb(16, 29, 37);
+    border-color: rgb(16, 29, 37);
+    color: white;
+    padding: 10px 20px; /* Added padding */
+    margin-bottom: 20px; /* Space below the button */
+}
+
+.btn-primary:hover {
+    background-color: #0d1a1f; /* Darker shade for hover effect */
+}

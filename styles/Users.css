@@ -1,35 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-
-body {
-    background-color: #f9f9f9; /* Neutral background color */
+html, body {
+    height: 100%;
+    background-color: rgb(236, 245, 255);
+    font-family: 'Poppins', sans-serif;
 }
+
 .container2 {
-    max-width: 100%; /* Reduced container width */
-    margin: 0px 100px 0px 0px; /* Centered container */
-    
-   
+    padding: 20px;
 }
+
+h2 {
+    font-weight: 600;
+    color: rgb(16, 29, 37);
+    margin-bottom: 20px; /* Space below the title */
+}
+
 .box-search {
     display: flex;
-    justify-content: end;
-    gap: 1%;
-    margin:-40px -48px -20px 0px;
+    align-items: center;
+    margin-bottom: 20px;
 }
+
+.btn {
+    margin-right: 10px; /* Spacing between buttons */
+}
+
+.form-control {
+    margin-right: 10px; /* Spacing between input and button */
+}
+
 .table {
-    font-size: 14px; /* Reduced table font size */
-    max-width: 100%;
-    box-shadow: 0.3px 0.3px 3px 0.2px rgba(0, 0, 0, 0.115);
-}
-.table th, .table td {
-    padding: 10px; /* Reduced table cell padding */
-}
-
-table{
-    margin: 60px;
+    border-collapse: separate; /* Ensures borders are separate for styling */
+    border-spacing: 0 15px; /* Adds spacing between table rows */
+    border-radius: 15px;
+    overflow: hidden; /* Hides overflow for rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Shadow for depth */
 }
 
+.table th {
+    background-color: rgb(16, 29, 37);
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    border-right: 2px solid rgba(255, 255, 255, 0.2); /* Vertical line between headers */
+}
 
+.table th:last-child {
+    border-right: none; /* Removes the last border */
+}
 
+.table td {
+    background-color: white; /* Row background color */
+    color: rgb(16, 29, 37); /* Text color */
+}
 
+.table tr:hover {
+    background-color: rgba(236, 245, 255, 0.7); /* Hover effect */
+}
 
+.text-center {
+    text-align: center;
+}
 
+.btn-warning, .btn-danger {
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for button */
+}
+
+.btn-warning:hover, .btn-danger:hover {
+    transform: translateY(-2px); /* Slight lift on hover */
+    background-color: rgba(255, 193, 7, 0.8); /* Slightly lighter color on hover */
+}
+
+.pagination {
+    margin-top: 20px; /* Space above pagination */
+}
+
+.page-item.active .page-link {
+    background-color: rgb(16, 29, 37); /* Active page color */
+    color: white; /* Active page text color */
+}
+
+.page-link {
+    color: rgb(16, 29, 37); /* Default page link color */
+    border-radius: 10px; /* Rounded corners for pagination */
+}
+
+.page-link:hover {
+    background-color: rgba(236, 245, 255, 0.5); /* Hover effect for pagination */
+}
+
+input[type="search"] {
+    border-radius: 20px; /* Rounded corners for search input */
+}

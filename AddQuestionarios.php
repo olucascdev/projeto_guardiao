@@ -53,7 +53,7 @@ if ($result_estabelecimento->num_rows > 0) {
     <title>Cadastro de Pergunta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="style/colaborador.css">
+    <link rel="stylesheet" href="styles/AddQuestionarios.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
 <body class="p-4">
