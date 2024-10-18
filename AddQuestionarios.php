@@ -150,7 +150,7 @@ if ($result_estabelecimento->num_rows > 0) {
                 <td><?php echo htmlspecialchars($row['questao']); ?></td>
                 <td><?php echo $row['questao_tipo'] == '1' ? 'Discursiva' : 'Objetiva'; ?></td>
                 <td class="text-center d-flex justify-content-center">
-                    <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>">
+                    <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>">
                         <i class="bi bi-pencil"></i>
                     </a>
                     <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>">

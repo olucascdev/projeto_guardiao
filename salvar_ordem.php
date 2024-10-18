@@ -28,8 +28,7 @@ if (isset($data['ordem']) && isset($data['codigo_avaliacao'])) {
         // Confirma a transação
         mysqli_commit($conn);
         
-        // Retorna sucesso
-        echo json_encode(['success' => true]);
+       
 
     } catch (Exception $e) {
         // Em caso de erro, desfaz a transação
