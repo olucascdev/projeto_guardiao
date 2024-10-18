@@ -8,6 +8,9 @@ $estabelecimento_id = filter_input(INPUT_POST, 'estabelecimento_id', FILTER_SANI
 $codigo_pergunta = filter_input(INPUT_POST, 'codigo_pergunta', FILTER_SANITIZE_NUMBER_INT);
 $nome_pergunta = filter_input(INPUT_POST, 'nome_pergunta', FILTER_SANITIZE_SPECIAL_CHARS);
 $tipo_pergunta = filter_input(INPUT_POST, 'tipo_pergunta', FILTER_SANITIZE_SPECIAL_CHARS);
+$nome_avaliacao = filter_input(INPUT_POST, 'nome_avaliacao', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
+$data_cadastro = filter_input(INPUT_POST, 'data_cadastro', FILTER_SANITIZE_SPECIAL_CHARS) ?? ''; 
+$observacoes = filter_input(INPUT_POST, 'observacoes', FILTER_SANITIZE_SPECIAL_CHARS) ?? '';
 
 // Inicializa as variáveis de resposta
 $respostas = filter_input(INPUT_POST, 'objetiva_opcao', FILTER_SANITIZE_SPECIAL_CHARS, FILTER_REQUIRE_ARRAY) ?? [];
@@ -45,7 +48,7 @@ if (!empty($codigo_pergunta)) {
 // Executar a consulta
 if (mysqli_query($conn, $query)) {
     // Redireciona após sucesso
-    header("Location: AddQuestionarios.php?codigo_avaliacao=$codigo_avaliacao");
+    header("Location: AddQuestionarios.php?codigo_avaliacao=$codigo_avaliacao&nome_avaliacao=" . urlencode($nome_avaliacao) . "&estabelecimento_id=$estabelecimento_id&data_cadastro=" . urlencode($data_cadastro) . "&observacoes=" . urlencode($observacoes));
     exit();
 } else {
     echo "Erro ao executar a consulta: " . mysqli_error($conn);

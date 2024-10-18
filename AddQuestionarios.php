@@ -69,6 +69,9 @@ if ($result_estabelecimento->num_rows > 0) {
         <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> 
         <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
         <input type="hidden" name="codigo_pergunta" value="<?php echo $codigo_pergunta; ?>"> 
+        <input type="hidden" name="nome_avaliacao" value="<?php echo urlencode($nome_avaliacao); ?>">
+        <input type="hidden" name="data_cadastro" value="<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>">
+        <input type="hidden" name="observacoes" value="<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
 
         <div class="mb-3">
             <label for="nome_pergunta" class="form-label">Pergunta</label>
