@@ -113,7 +113,7 @@ if ($result_estabelecimento->num_rows > 0) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Inclui o CSS do Bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"> <!-- Inclui ícones do Bootstrap -->
-    <link rel="stylesheet" href="styles/colaborador.css"> <!-- Inclui CSS personalizado -->
+    <link rel="stylesheet" href="styles/Colaborador.css"> <!-- Inclui CSS personalizado -->
     <title>Colaboradores</title> <!-- Título da página -->
 </head>
 <body>
@@ -187,7 +187,7 @@ if ($result_estabelecimento->num_rows > 0) {
                         <td>
                             <form method="POST" action="" class="excluir-form"> <!-- Formulário para excluir colaborador -->
                                 <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>"> <!-- ID do colaborador a ser excluído -->
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?');"><i class="bi bi-trash"></i> Excluir</button> <!-- Botão para excluir colaborador -->
+                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Tem certeza que deseja excluir?');"><i class="bi bi-trash"></i> Excluir</button> <!-- Botão para excluir colaborador -->
                             </form>
                         </td>
                     </tr>
