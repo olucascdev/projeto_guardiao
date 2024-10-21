@@ -107,7 +107,7 @@ body {
 /* Table styling */
 .table {
     margin: 10px auto; /* Ajustado para diminuir o espaço */
-    width: 1100px; /* Garante que a tabela ocupe toda a largura disponível */
+    width: 1170px; /* Garante que a tabela ocupe toda a largura disponível */
     max-width: 100%; /* Altera para 100% para evitar rolagem */
     border-radius: 5px;
     overflow: hidden;

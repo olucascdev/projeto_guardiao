@@ -25,7 +25,7 @@
   <div class="fixed">
     <div class="sidebar d-flex flex-column p-3">
       <div class="logo text-center mb-4">
-        <img src="imagem/logo.png" alt="">
+        <img src="imagem/logoperbras" alt="">
         <h3>Guardião</h3>
       </div>
       <nav>
