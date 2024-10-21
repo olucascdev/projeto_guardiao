@@ -59,7 +59,7 @@ $stmt->close(); // Fecha a declaração preparada
             <button class="btn btn-success"><i class="bi bi-clipboard2-plus-fill"></i> Adicionar Questionário</button>
         </a>
         <a href="Colaborador.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>&observacoes=<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
-            <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i>  Adicionar Colaborador</button>
+            <button class="btn btn-success"><i class="bi bi-person-plus-fill"></i> Adicionar Colaborador</button>
         </a>
     </div>
     <!-- Formulário para editar avaliação -->

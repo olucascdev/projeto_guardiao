@@ -130,7 +130,7 @@ if ($result_estabelecimento->num_rows > 0) {
                 <thead>
                     <tr>
                         <th>Colaborador</th>
-                        <th width="12%">Ações</th>
+                        <th width="15%">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -177,7 +177,7 @@ if ($result_estabelecimento->num_rows > 0) {
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th width="12%">Ações</th>
+                    <th width="15%">Ações</th>
                 </tr>
             </thead>
             <tbody>
