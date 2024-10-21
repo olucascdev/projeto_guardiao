@@ -92,7 +92,7 @@ $result_avaliacoes = mysqli_query($conn, $query_avaliacoes);
             <tr>
                 <th style="width: 5%;">Código</th>
                 <th>Nome da Avaliação</th>
-                <th style="width: 10%;">Data da Avaliação</th>
+                <th style="width: 10%;">Data</th>
                 <th>Descrição</th>
                 <th style="width: 10%;">Ações</th>
             </tr>

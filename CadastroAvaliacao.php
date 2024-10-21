@@ -20,7 +20,7 @@ $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
     <title><?php echo !empty($codigo) ? 'Editar Avaliação' : 'Cadastro de Nova Avaliação'; ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="styles/CadastroUser.css">
+    <link rel="stylesheet" href="styles/editar.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -60,9 +60,9 @@ $action = "salvar_avaliacoes.php"; // Ajuste para o arquivo de salvar
             <!-- Botões alinhados com o formulário -->
             <div class="row">
                 <div class="col-md-12 d-flex justify-content-start">
-                    <button class="btn btn-success p-3 m-2" type="submit">Salvar</button>
-                    <button class="btn btn-warning p-3 m-2" type="reset">Limpar</button>
-                    <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2">Cancelar</a>
+                    <button class="btn btn-success p-3 m-2 w-25" type="submit">Salvar</button>
+                    <button class="btn btn-warning p-3 m-2 w-25" type="reset">Limpar</button>
+                    <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2 w-25">Cancelar</a>
                 </div>
             </div>
         </form>

@@ -10,7 +10,7 @@ include_once 'Controller/conexao.php';
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons (for icons in sidebar) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstra0p-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="styles/CadastroUser.css">
+    <link rel="stylesheet" href="styles/editar.css">
 </head>
 <body>
     <!-- Primeira linha com 4 colunas -->
@@ -121,9 +121,9 @@ include_once 'Controller/conexao.php';
                 </div>
                 <!-- Botões -->
                 <div class="d-flex">
-                    <button class="btn btn-success w-75 p-2 m-3" type="submit" onclick="enviarFormulario()" >Salvar</button>
-                    <button class="btn btn-warning w-75 p-2 m-3" type="reset">Limpar</button>
-                    <a href="Users.php"><button class="btn btn-danger  w-75 p-2 m-3" type="button">Cancelar</button></a>
+                    <button class="btn btn-success w-25 p-3 m-2" type="submit" onclick="enviarFormulario()" >Salvar</button>
+                    <button class="btn btn-warning w-25 p-3 m-2" type="reset">Limpar</button>
+                    <a href="Users.php"><button class="btn btn-danger  w-100 p-3 m-2" type="button">Cancelar</button></a>
                 </div>
             
     </div>               

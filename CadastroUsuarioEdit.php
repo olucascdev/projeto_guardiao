@@ -21,7 +21,7 @@ if (isset($_GET['id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro de Usuário</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="styles/CadastroUser.css">
+    <link rel="stylesheet" href="styles/editar.css">
 </head>
 <body>
     <div class="container mt-5">
@@ -124,9 +124,9 @@ if (isset($_GET['id'])) {
             </div>
         </div>
 
-        <div class="d-flex w-25">
-            <button class="btn btn-primary  p-2 m-2" onclick="salvarUsuario(<?php echo isset($usuario) ? $usuario->id : 'null'; ?>)">Salvar Usuário</button>
-            <a href="Users.php"><button class="btn btn-danger  p-2 m-2" type="button">Cancelar</button></a>
+        <div class="d-flex">
+            <button class="btn btn-primary  p-3 m-2 w-25" onclick="salvarUsuario(<?php echo isset($usuario) ? $usuario->id : 'null'; ?>)">Salvar Usuário</button>
+            <a href="Users.php"><button class="btn btn-danger  p-3 m-2 w-100" type="button">Cancelar</button></a>
         </div>
     </div>               
 

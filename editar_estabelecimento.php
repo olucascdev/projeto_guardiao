@@ -23,7 +23,7 @@ $action = "salvar_estabelecimentos.php"; // Salvar na mesma página que você j�
     <title>Editar Estabelecimento</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="styles/CadastroUser.css">
+    <link rel="stylesheet" href="styles/editar.css">
 </head>
 <body>
 <div class="container mt-5">
@@ -56,9 +56,9 @@ $action = "salvar_estabelecimentos.php"; // Salvar na mesma página que você j�
         <!-- Botões alinhados com o formulário -->
         <div class="row">
             <div class="col-md-12 d-flex justify-content-start">
-                <button class="btn btn-success p-3 m-2" type="submit">Salvar</button>
-                <button class="btn btn-warning p-3 m-2" type="reset">Limpar</button>
-                <a href="avaliacao_estabelecimento.php" class="btn btn-danger p-3 m-2">Cancelar</a>
+                <button class="btn btn-success p-3 m-2 w-25" type="submit">Salvar</button>
+                <button class="btn btn-warning p-3 m-2 w-25" type="reset">Limpar</button>
+                <a href="avaliacao_estabelecimento.php" class="btn btn-danger p-3 m-2 w-25">Cancelar</a>
             </div>
         </div>
     </form>

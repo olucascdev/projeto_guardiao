@@ -48,7 +48,7 @@ $stmt->close(); // Fecha a declaração preparada
     <!-- Inclusão do Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css"> <!-- Ícones do Bootstrap -->
-    <link rel="stylesheet" href="styles/CadastroUser.css"> <!-- Estilo customizado -->
+    <link rel="stylesheet" href="styles/editar.css"> <!-- Estilo customizado -->
 </head>
 <body>
 <div class="container mt-5"> <!-- Container Bootstrap -->
@@ -88,9 +88,9 @@ $stmt->close(); // Fecha a declaração preparada
 
         <div class="row"> <!-- Início da linha para botões de ação -->
             <div class="col-md-12 d-flex justify-content-start">
-                <button class="btn btn-success p-3 m-2" type="submit">Salvar</button> <!-- Botão para salvar -->
-                <button class="btn btn-warning p-3 m-2" type="reset">Limpar</button> <!-- Botão para limpar o formulário -->
-                <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2">Cancelar</a> <!-- Botão para cancelar, redirecionando para a página de avaliações -->
+                <button class="btn btn-success p-3 m-2 w-25" type="submit">Salvar</button> <!-- Botão para salvar -->
+                <button class="btn btn-warning p-3 m-2 w-25" type="reset">Limpar</button> <!-- Botão para limpar o formulário -->
+                <a href="avaliacoesHome.php?estabelecimento_id=<?php echo $estabelecimento_id; ?>" class="btn btn-danger p-3 m-2 w-25">Cancelar</a> <!-- Botão para cancelar, redirecionando para a página de avaliações -->
             </div>
         </div>
     </form>
