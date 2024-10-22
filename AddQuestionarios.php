@@ -56,6 +56,7 @@ if ($result_estabelecimento->num_rows > 0) {
     <link rel="stylesheet" href="styles/AddQuestionarios.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
 </head>
+
 <body class="p-4">
 
 <div class="container">
@@ -65,7 +66,7 @@ if ($result_estabelecimento->num_rows > 0) {
                 <i class="bi bi-arrow-left"></i> Voltar
             </a>
     <h2>Cadastro de Pergunta <?php echo "- " . htmlspecialchars($nome_avaliacao, ENT_QUOTES) . " - " . htmlspecialchars($abrev, ENT_QUOTES); ?></h2>
-    <form action="salvar_pergunta.php" method="POST">
+    <form action="salvar_pergunta.php" method="POST" id="perguntaForm">
         <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> 
         <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
         <input type="hidden" name="codigo_pergunta" value="<?php echo $codigo_pergunta; ?>"> 
@@ -133,6 +134,7 @@ if ($result_estabelecimento->num_rows > 0) {
 <table class="table table-sm table-light table-bordered table-striped table-hover mt-3" border="1" cellspacing=0 cellpadding=5 id="perguntasTable">
     <thead>
         <tr>
+            <th class="sticky-col" style="width: 3%;">qtd</th>
             <th>Pergunta</th>
             <th style="width: 15%;">Tipo</th>
             <th style="width: 15%;">Ações</th>
@@ -140,26 +142,30 @@ if ($result_estabelecimento->num_rows > 0) {
     </thead>
     <tbody>
         <?php 
-        $stmt = $conn->prepare("SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = ?");
+        $contador = 1; // Iniciar o contador
+        $stmt = $conn->prepare("SELECT * FROM avaliacao_estabelecimento_questoes WHERE avaliacao_estabelecimento_id = ? ORDER BY ordem ASC");
         $stmt->bind_param("i", $codigo_avaliacao);
         $stmt->execute();
         $rows = $stmt->get_result();
 
         while ($row = $rows->fetch_assoc()): ?>
             <tr data-id="<?php echo $row['id']; ?>">
+                <td class="sticky-col"><?php echo $contador; ?></td> <!-- Exibe o número da pergunta -->
                 <td><?php echo htmlspecialchars($row['questao']); ?></td>
                 <td><?php echo $row['questao_tipo'] == '1' ? 'Discursiva' : 'Objetiva'; ?></td>
                 <td class="text-center d-flex justify-content-center">
                     <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-warning btn-sm me-2">
                         <i class="bi bi-pencil w-25"></i>
                     </a>
-                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>&codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill w-25"></i>
+                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>&codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-danger btn-sm">
+                        <i class="bi bi-trash-fill w-25"></i>
                     </a>
                 </td>
-
             </tr>
-        <?php endwhile; ?>
-    </tbody>
+        <?php 
+        $contador++; // Incrementa o contador para a próxima linha
+        endwhile; ?>
+</tbody>
 </table>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
@@ -187,18 +193,22 @@ if ($result_estabelecimento->num_rows > 0) {
 
     function salvarOpcoes() {
         var quantidade = document.getElementById('quantidade_opcoes').value;
+        // Limpar as opções existentes antes de salvar as novas
+        var inputOpcao = document.querySelectorAll('input[name="objetiva_opcao[]"]');
+        inputOpcao.forEach(input => input.remove());
+
         for (var i = 1; i <= quantidade; i++) {
             var valorOpcao = document.getElementById('objetiva_opcao' + i).value;
             var inputOpcao = document.createElement("input");
             inputOpcao.type = "hidden";
             inputOpcao.name = "objetiva_opcao[]";
             inputOpcao.value = valorOpcao;
-            document.querySelector('form').appendChild(inputOpcao);
+            document.getElementById('perguntaForm').appendChild(inputOpcao);
         }
     }
 
     var sortable = Sortable.create(document.getElementById('perguntasTable').querySelector('tbody'), {
-        animation: 150,
+        animation: 300,
         onEnd: function (evt) {
             var ids = Array.from(evt.from.children).map(row => row.getAttribute('data-id'));
             fetch('salvar_ordem.php', {
