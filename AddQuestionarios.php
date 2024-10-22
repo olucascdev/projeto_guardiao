@@ -69,7 +69,7 @@ if ($result_estabelecimento->num_rows > 0) {
         <input type="hidden" name="codigo_avaliacao" value="<?php echo $codigo_avaliacao; ?>"> 
         <input type="hidden" name="estabelecimento_id" value="<?php echo $estabelecimento_id; ?>">
         <input type="hidden" name="codigo_pergunta" value="<?php echo $codigo_pergunta; ?>"> 
-        <input type="hidden" name="nome_avaliacao" value="<?php echo urlencode($nome_avaliacao); ?>">
+        <input type="hidden" name="nome_avaliacao" value="<?php echo htmlspecialchars($nome_avaliacao); ?>">
         <input type="hidden" name="data_cadastro" value="<?php echo htmlspecialchars($data_cadastro, ENT_QUOTES); ?>">
         <input type="hidden" name="observacoes" value="<?php echo htmlspecialchars($observacoes, ENT_QUOTES); ?>">
 
@@ -153,8 +153,7 @@ if ($result_estabelecimento->num_rows > 0) {
                     <a href="AddQuestionarios.php?codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&codigo_pergunta=<?php echo $row['id']; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-warning btn-sm me-2">
                         <i class="bi bi-pencil w-25"></i>
                     </a>
-                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">
-                        <i class="bi bi-trash-fill w-25"></i>
+                    <a href="excluir_pergunta.php?id=<?php echo $row['id']; ?>&codigo_avaliacao=<?php echo $codigo_avaliacao; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&estabelecimento_id=<?php echo $estabelecimento_id; ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>" class="btn btn-danger btn-sm"><i class="bi bi-trash-fill w-25"></i>
                     </a>
                 </td>
 
