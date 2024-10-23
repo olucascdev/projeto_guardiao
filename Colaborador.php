@@ -164,18 +164,18 @@ if ($result_estabelecimento->num_rows > 0) {
                         <td>
                             <!-- Dropdown para selecionar Avaliador -->
                             <select class="form-select" name="avaliador">
-                                <option value="1">Sim</option>
                                 <option value="0">Não</option>
+                                <option value="1">Sim</option>
                             </select>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-success" id="addColaborador">Adicionar</button>
+                            <button type="submit" class="btn btn-success w-100" id="addColaborador">Adicionar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
-        <h4>Colaboradores Vinculados</h4>
+        <h3>Colaboradores Vinculados</h3>
         <table class="table table-light table-bordered table-striped table-hover m-5">
             <thead>
                 <tr>
@@ -197,7 +197,7 @@ if ($result_estabelecimento->num_rows > 0) {
                             <td>
                                 <form method="POST" action="">
                                     <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>">
-                                    <button type="submit" class="btn btn-danger">Remover</button>
+                                    <button type="submit" class="btn btn-danger w-100">Remover</button>
                                 </form>
                             </td>
                         </tr>
