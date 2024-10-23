@@ -171,13 +171,3 @@ h2 {
 }
 
 
-.sticky-col {
-    position: sticky;
-    left: 0;
-    background-color: #f8f9fa; /* Altere a cor de fundo conforme necessário */
-    z-index: 1;
-}
-
-table tbody td.sticky-col {
-    background-color: #fff; /* Cor de fundo das células do corpo */
-}

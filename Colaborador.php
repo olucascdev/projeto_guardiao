@@ -142,8 +142,9 @@ if ($result_estabelecimento->num_rows > 0) {
                             // Certifique-se de que $estabelecimento_id foi definido antes
                             if (isset($estabelecimento_id)) {
                                 // Consulta para obter colaboradores do estabelecimento específico
-                                $query = "SELECT id, nome FROM colaboradores WHERE unidade_id = $estabelecimento_id ORDER BY nome ASC"; 
+                                $query = "SELECT id, nome FROM colaboradores WHERE unidade_id = $estabelecimento_id AND ativo != 0 AND status < 3 ORDER BY nome ASC"; 
                                 $result = mysqli_query($conn1, $query);
+
                                 
                                 // Verifica se houve resultados na consulta
                                 if(mysqli_num_rows($result) > 0) {
