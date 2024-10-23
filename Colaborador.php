@@ -23,6 +23,7 @@ $_SESSION['estabelecimento_atual'] = $estabelecimento_id;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['colaborador_id'])) {
         $colaborador_id = filter_input(INPUT_POST, 'colaborador_id', FILTER_SANITIZE_NUMBER_INT);
+        $is_avaliador = filter_input(INPUT_POST, 'avaliador', FILTER_SANITIZE_NUMBER_INT); // Captura o status do avaliador
         
         if ($colaborador_id) {
             // Obtém os detalhes do colaborador
@@ -41,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (!$is_vinculado) {
                     // Insere os dados na tabela de vinculação e na sessão
-                    $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email) 
-                                     VALUES ('$codigo_avaliacao', '$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}')";
+                    $insert_query = "INSERT INTO avaliacao_estabelecimento_colaborador (avaliacao_estabelecimento_id, colaborador_id, colaborador_telmovel, colaborador_email, avaliador) 
+                                     VALUES ('$codigo_avaliacao', '$colaborador_id', '{$colaborador['tel_movel']}', '{$colaborador['email']}', '$is_avaliador')";
                     mysqli_query($conn, $insert_query);
 
                     // Adiciona o colaborador à lista de vinculados na sessão
@@ -50,7 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         'id' => $colaborador_id,
                         'nome' => $colaborador['nome'],
                         'tel_movel' => $colaborador['tel_movel'],
-                        'email' => $colaborador['email']
+                        'email' => $colaborador['email'],
+                        'avaliador' => $is_avaliador // Armazena o status de avaliador
                     ];
                 } else {
                     echo "<script>alert('Colaborador já está vinculado.');</script>";
@@ -130,6 +132,7 @@ if ($result_estabelecimento->num_rows > 0) {
                 <thead>
                     <tr>
                         <th>Colaborador</th>
+                        <th width="10%">Avaliador</th> <!-- Nova coluna para status de avaliador -->
                         <th width="15%">Ações</th>
                     </tr>
                 </thead>
@@ -145,57 +148,63 @@ if ($result_estabelecimento->num_rows > 0) {
                                 $query = "SELECT id, nome FROM colaboradores WHERE unidade_id = $estabelecimento_id AND ativo != 0 AND status < 3 ORDER BY nome ASC"; 
                                 $result = mysqli_query($conn1, $query);
 
-                                
                                 // Verifica se houve resultados na consulta
                                 if(mysqli_num_rows($result) > 0) {
                                     // Itera sobre os colaboradores retornados e preenche o select
                                     while($row = mysqli_fetch_assoc($result)) {
-                                        echo "<option value='" . $row['id'] . "'>" . $row['nome'] . "</option>";
+                                        echo "<option value='{$row['id']}'>" . htmlspecialchars($row['nome'], ENT_QUOTES) . "</option>";
                                     }
                                 } else {
-                                    echo "<option value=''>Nenhum colaborador encontrado</option>"; // Mensagem se não houver colaboradores
+                                    echo "<option value=''>Nenhum colaborador encontrado</option>";
                                 }
-                            } else {
-                                echo "<option value=''>Estabelecimento não definido</option>";
                             }
                             ?>
                         </select>
                         </td>
                         <td>
-                             <!-- Botão para adicionar colaborador -->
-                            <button class="btn btn-success w-100" type="submit" onclick="adicionarParametrosNaUrl()">
-                        <i class="bi bi-plus-circle"></i> Adicionar
-                        </button>
-
+                            <!-- Dropdown para selecionar Avaliador -->
+                            <select class="form-select" name="avaliador">
+                                <option value="1">Sim</option>
+                                <option value="0">Não</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-success" id="addColaborador">Adicionar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
-
-        <h3>Colaboradores Vinculados ao Questionário</h3>
-        <table class="table table-light table-bordered table-striped table-hover m-5" border="1" cellspacing="0" cellpadding="10"> <!-- Tabela para exibir colaboradores vinculados -->
+        <h4>Colaboradores Vinculados</h4>
+        <table class="table table-light table-bordered table-striped table-hover m-5">
             <thead>
                 <tr>
                     <th>Nome</th>
+                    <th width="5%">Avaliador</th> <!-- Coluna para status de avaliador -->
                     <th width="15%">Ações</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($vinculados_pagina as $vinculado): ?> <!-- Itera sobre os colaboradores vinculados para exibição -->
+                <?php if (empty($vinculados_pagina)): ?>
                     <tr>
-                        <td><?= htmlspecialchars($vinculado['nome'], ENT_QUOTES); ?></td> <!-- Nome do colaborador -->
-                        <td>
-                            <form method="POST" action="" class="excluir-form"> <!-- Formulário para excluir colaborador -->
-                                <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>"> <!-- ID do colaborador a ser excluído -->
-                                <button type="submit" class="btn btn-danger w-100" onclick="return confirm('Tem certeza que deseja excluir?');"><i class="bi bi-trash"></i> Excluir</button> <!-- Botão para excluir colaborador -->
-                            </form>
-                        </td>
+                        <td colspan="5">Nenhum colaborador vinculado.</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php else: ?>
+                    <?php foreach ($vinculados_pagina as $vinculado): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($vinculado['nome'], ENT_QUOTES); ?></td>
+                            <td><?= isset($vinculado['avaliador']) ? ($vinculado['avaliador'] ? 'Sim' : 'Não') : 'Não'; ?></td>
+                            <td>
+                                <form method="POST" action="">
+                                    <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>">
+                                    <button type="submit" class="btn btn-danger">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
-
         <!-- Navegação de paginação -->
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
@@ -218,16 +227,7 @@ if ($result_estabelecimento->num_rows > 0) {
                 <?php endif; ?>
             </ul>
         </nav>
-
     </div>
-    <script>
-        function adicionarParametrosNaUrl() {
-            // Obtém o formulário
-            var form = document.getElementById('form-adicionar');
-            
-            // Ajusta o atributo 'action' para incluir os parâmetros na URL
-            form.action = form.action + '?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>';
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Inclui JS do Bootstrap -->
 </body>
 </html>

@@ -150,7 +150,8 @@ if ($result_estabelecimento->num_rows > 0) {
 
         while ($row = $rows->fetch_assoc()): ?>
             <tr data-id="<?php echo $row['id']; ?>">
-                <td class="sticky-col"><?php echo $contador; ?></td> <!-- Exibe o número da pergunta -->
+                <!-- Substitui o contador pelo valor da coluna 'ordem' -->
+                <td class="sticky-col"><?php echo htmlspecialchars($row['ordem']); ?></td> <!-- Exibe o número da pergunta baseado em 'ordem' -->
                 <td><?php echo htmlspecialchars($row['questao']); ?></td>
                 <td><?php echo $row['questao_tipo'] == '1' ? 'Discursiva' : 'Objetiva'; ?></td>
                 <td class="text-center d-flex justify-content-center">
@@ -162,10 +163,8 @@ if ($result_estabelecimento->num_rows > 0) {
                     </a>
                 </td>
             </tr>
-        <?php 
-        $contador++; // Incrementa o contador para a próxima linha
-        endwhile; ?>
-</tbody>
+        <?php endwhile; ?>
+    </tbody>
 </table>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
