@@ -197,7 +197,7 @@ if ($result_estabelecimento->num_rows > 0) {
                             <td>
                                 <form method="POST" action="">
                                     <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>">
-                                    <button type="submit" class="btn btn-danger w-100">Remover</button>
+                                    <button type="submit" class="btn btn-danger w-100">Remover Colaborador</button>
                                 </form>
                             </td>
                         </tr>
