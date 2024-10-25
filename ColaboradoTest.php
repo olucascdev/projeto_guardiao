@@ -84,21 +84,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Armazena os colaboradores vinculados
+
+
 $vinculados = $_SESSION['vinculados'][$codigo_avaliacao][$estabelecimento_id] ?? [];
+        $total_vinculados = count($vinculados);
+        $por_pagina = 3;
+        $total_paginas = ceil($total_vinculados / $por_pagina);
 
-// Paginação
-$total_vinculados = count($vinculados);
-$por_pagina = 3;
-$pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
-$offset = ($pagina - 1) * $por_pagina;
-$total_paginas = ceil($total_vinculados / $por_pagina);
-$vinculados_pagina = array_slice($vinculados, $offset, $por_pagina);
+        if ($pagina > $total_paginas && $total_paginas > 0) {
+            header("Location: ?codigo_avaliacao=$codigo_avaliacao&estabelecimento_id=$estabelecimento_id&nome_avaliacao=" . urlencode($nome_avaliacao) . "&data_cadastro=" . urlencode($data_cadastro) . "&observacoes=" . urlencode($observacoes) . "&pagina=$total_paginas");
+            exit;
+        } elseif ($total_paginas === 0) {
+            header("Location: ?codigo_avaliacao=$codigo_avaliacao&estabelecimento_id=$estabelecimento_id&nome_avaliacao=" . urlencode($nome_avaliacao) . "&data_cadastro=" . urlencode($data_cadastro) . "&observacoes=" . urlencode($observacoes));
+            exit;
+        }
 
-$query_estabelecimento = "SELECT abrev FROM estabelecimentos WHERE id = ?";
-$stmt = $conn->prepare($query_estabelecimento); // Prepara a consulta
-$stmt->bind_param("i", $estabelecimento_id); // Faz o binding do parâmetro
-$stmt->execute(); // Executa a consulta
-$result_estabelecimento = $stmt->get_result(); // Obtém o resultado
 
 // Verifica se o estabelecimento foi encontrado e captura a abreviação
 if ($result_estabelecimento->num_rows > 0) {
@@ -164,18 +164,18 @@ if ($result_estabelecimento->num_rows > 0) {
                         <td>
                             <!-- Dropdown para selecionar Avaliador -->
                             <select class="form-select" name="avaliador">
-                                <option value="1">Sim</option>
                                 <option value="0">Não</option>
+                                <option value="1">Sim</option>
                             </select>
                         </td>
                         <td>
-                            <button type="submit" class="btn btn-success" id="addColaborador">Adicionar</button>
+                            <button type="submit" class="btn btn-success w-100" id="addColaborador">Adicionar</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </form>
-        <h4>Colaboradores Vinculados</h4>
+        <h3>Colaboradores Vinculados</h3>
         <table class="table table-light table-bordered table-striped table-hover m-5">
             <thead>
                 <tr>
@@ -197,7 +197,7 @@ if ($result_estabelecimento->num_rows > 0) {
                             <td>
                                 <form method="POST" action="">
                                     <input type="hidden" name="excluir_id" value="<?= $vinculado['id']; ?>">
-                                    <button type="submit" class="btn btn-danger">Remover</button>
+                                    <button type="submit" class="btn btn-danger w-100">Remover</button>
                                 </form>
                             </td>
                         </tr>
@@ -206,27 +206,15 @@ if ($result_estabelecimento->num_rows > 0) {
             </tbody>
         </table>
         <!-- Navegação de paginação -->
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <?php if ($pagina > 1): ?> <!-- Se não estiver na primeira página -->
-                    <li class="page-item">
-                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $pagina - 1; ?>">Anterior</a> <!-- Botão "Anterior" -->
-                    </li>
-                <?php endif; ?>
-
-                <?php for ($i = 1; $i <= $total_paginas; $i++): ?> <!-- Itera sobre o total de páginas -->
-                    <li class="page-item <?= $i === $pagina ? 'active' : ''; ?>">
-                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $i; ?>"><?= $i; ?></a> <!-- Botões de página -->
+        <div class="pagination">
+            <ul class="pagination">
+                <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
+                    <li class="page-item <?= ($i === $pagina) ? 'active' : ''; ?>">
+                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&pagina=<?= $i; ?>&nome_avaliacao=<?= urlencode($nome_avaliacao); ?>&data_cadastro=<?= urlencode($data_cadastro); ?>&observacoes=<?= urlencode($observacoes); ?>"><?= $i; ?></a>
                     </li>
                 <?php endfor; ?>
-
-                <?php if ($pagina < $total_paginas): ?> <!-- Se não estiver na última página -->
-                    <li class="page-item">
-                        <a class="page-link" href="?codigo_avaliacao=<?= $codigo_avaliacao; ?>&estabelecimento_id=<?= $estabelecimento_id; ?>&nome_avaliacao=<?php echo urlencode($nome_avaliacao); ?>&data_cadastro=<?php echo urlencode($data_cadastro); ?>&observacoes=<?php echo urlencode($observacoes); ?>&pagina=<?= $pagina + 1; ?>">Próximo</a> <!-- Botão "Próximo" -->
-                    </li>
-                <?php endif; ?>
             </ul>
-        </nav>
+        </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> <!-- Inclui JS do Bootstrap -->
 </body>
